@@ -1,15 +1,57 @@
-# Site settings
-title: Ben Rifkind
-email: ben (dot) rifkind (at) gmail (dot) com
-description: > # this means to ignore newlines until "baseurl:"
-  Recent phD graduate in probability from the University of Toronto. Now trying to bridge
-  the gap from academia to industry by learning statistics, data analysis, and R. This website
-  will hosts writeups of the projects I'm working on.
+# Site wide configuration
 
-  
-baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://yourdomain.com" # the base hostname & protocol for your site
-#twitter_username: 
-github_username: benrifkind 
-# Build settings
-markdown: kramdown
+title:            This is a website 
+locale:           en_US
+url:              http://localhost:4000
+
+
+# Jekyll configuration
+
+permalink:   /:categories/:title/
+markdown:    kramdown
+highlighter: pygments
+sass:
+  sass_dir: _sass
+  style: compressed
+gems:
+  - jekyll-sitemap
+
+kramdown:
+  auto_ids: true
+  footnote_nr: 1
+  entity_output: as_char
+  toc_levels: 1..6
+  use_coderay: false
+
+
+# Site owner
+owner:
+  name: Ben Rifkind
+  avatar: BenR2.jpg
+  bio: "I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis."
+  email: 
+  disqus-shortname: 
+  twitter: #username
+  facebook: #username
+  google:
+    plus: #username
+    analytics: 
+    verify: 
+    ad-client: 
+    ad-slot: 
+  bing-verify: 
+  github: benrifkind
+  stackoverflow: #http://stackoverflow.com/users/123456/username
+  linkedin: #username
+  instagram: #username
+  lastfm: #username
+  tumblr: #username
+  pinterest: #username
+  foursquare: #username
+  steam: #username
+  dribbble: #username
+  youtube: #username
+  soundcloud: #username
+
+include: [".htaccess"]
+exclude: ["lib", "config.rb", "Capfile", "config", "log", "Rakefile", "Rakefile.rb", "tmp", "less", "*.sublime-project", "*.sublime-workspace", "test", "spec", "Gruntfile.js", "package.json", "node_modules", "Gemfile", "Gemfile.lock", "LICENSE", "README.md"]

@@ -1,10 +1,13 @@
 ---
 layout: post
 title: "Fit Analysis"
+excerpt: "Categorizing quality of exercises"
+tags: [R, data analysis, exercise]
 ---
 
 {% highlight r %}
 library(randomForest)
+library(ggplot2)
 {% endhighlight %}
 Read in the training and testing data
 
@@ -12,7 +15,7 @@ Read in the training and testing data
 train = read.csv("pml-training.csv", stringsAsFactors = FALSE)
 test = read.csv("pml-testing.csv", stringsAsFactors = FALSE)
 {% endhighlight %}
-I wrote a function to find the indices of the columns in the training data which have not
+I wrote a function to find the indices of the columns in the training data which do have not
 enough data. They need to have more than 406 entries which are not blank or NA.
 
 {% highlight r %}
@@ -58,8 +61,7 @@ no.use.col
 ##  [86]  71  72  73  74  87  88  89  90  91  92  95  98 101 125 126 127 128
 ## [103] 129 130 133 136 139
 {% endhighlight %}
-Now I prepare the data by separating out the classification column and removing the unnecessary
-columns. Since the classification column will not be used for analysis I remove it.
+Now I prepare the data by separating out the classification column and removing the unnecessary columns. Since the classification column will not be used for analysis I remove it.
 
 {% highlight r %}
 train.class = as.factor(train$classe)
@@ -89,6 +91,15 @@ train.prcomp = prcomp(train, center = FALSE)
 train = as.data.frame(predict(train.prcomp, newdata = train))
 test = as.data.frame(predict(train.prcomp, newdata = test))
 {% endhighlight %}
+A plot of the first two principal components of the training set. Do they separate 
+the data well?
+
+{% highlight r %}
+qplot(PC1, PC2, data = train, colour = train.class)
+{% endhighlight %}
+
+![center](/../figs/2014-10-30-Fit-Analysis/unnamed-chunk-7-1.png) 
+
 I did some analysis to find how many PC's were necessary by splitting the train data into training and validation data. This is probably not a good idea since I calculated means and sd's for the full train set. Should have split the data up top. 
 
 {% highlight r %}

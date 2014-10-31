@@ -1,16 +1,17 @@
 ---
-title: "FitAnalysis"
+title: "Fit Analysis"
 output: html_document
 ---
 ```{r, message = FALSE}
 library(randomForest)
+library(ggplot2)
 ```
 Read in the training and testing data
 ```{r}
 train = read.csv("pml-training.csv", stringsAsFactors = FALSE)
 test = read.csv("pml-testing.csv", stringsAsFactors = FALSE)
 ```
-I wrote a function to find the indices of the columns in the training data which have not
+I wrote a function to find the indices of the columns in the training data which do have not
 enough data. They need to have more than 406 entries which are not blank or NA.
 ```{r}
 #function to find index of columns with very little usable data
@@ -42,8 +43,7 @@ no.use.col = bad.cols(train)
 no.use.col = c(1:7, no.use.col)
 no.use.col
 ```
-Now I prepare the data by separating out the classification column and removing the unnecessary
-columns. Since the classification column will not be used for analysis I remove it.
+Now I prepare the data by separating out the classification column and removing the unnecessary columns. Since the classification column will not be used for analysis I remove it.
 ```{r}
 train.class = as.factor(train$classe)
 
@@ -71,6 +71,12 @@ train.prcomp = prcomp(train, center = FALSE)
 train = as.data.frame(predict(train.prcomp, newdata = train))
 test = as.data.frame(predict(train.prcomp, newdata = test))
 ```
+A plot of the first two principal components of the training set. Do they separate 
+the data well?
+```{r}
+qplot(PC1, PC2, data = train, colour = train.class)
+```
+
 I did some analysis to find how many PC's were necessary by splitting the train data into training and validation data. This is probably not a good idea since I calculated means and sd's for the full train set. Should have split the data up top. 
 ```{r}
 train.cut = train[, c(1:25)] #use only a few of PCA's
