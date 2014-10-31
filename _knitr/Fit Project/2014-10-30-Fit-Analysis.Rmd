@@ -2,6 +2,14 @@
 title: "Fit Analysis"
 output: html_document
 ---
+
+For my first post I thought I'd write about some basic data classification. I've been going through the courses given by Carnegie Melon in the [Data Science Specialization Stream](https://www.coursera.org/specialization/jhudatascience/1) to learn R and some 
+introductory data science techniques. I recommend it. 
+
+Anyway, for the [Practical Machine Learning Course](https://class.coursera.org/predmachlearn-006) they asked us to classify the how well people were performing bicep curls. The data as well as the explanation of the problem is [here](http://groupware.les.inf.puc-rio.br/har). We have data taken from subjects wearing sensors while they perform a bicep curl with five differing techniques ("A", "B", "C", "D", "E"). "A" corresponds to a "proper" bicep curl and the rest are differing bad techniques. The goal is to use this data to construct a classifier that can then classify the bicep curl using only the sensory data.   
+
+The [random forest](http://cran.r-project.org/web/packages/randomForest/index.html) worked extremely well for this. 
+
 ```{r, message = FALSE}
 library(randomForest)
 library(ggplot2)
@@ -79,14 +87,14 @@ qplot(PC1, PC2, data = train, colour = train.class)
 
 I did some analysis to find how many PC's were necessary by splitting the train data into training and validation data. This is probably not a good idea since I calculated means and sd's for the full train set. Should have split the data up top. 
 ```{r}
-train.cut = train[, c(1:25)] #use only a few of PCA's
-train.cut$classe = train.class #add back in classification column
-
-set.seed(1224)
-fit = randomForest(classe~., data=train.cut,
-               importance = TRUE, ntree = 130)
-predictions = predict(fit, newdata = test)
-predictions
+# train.cut = train[, c(1:25)] #use only a few of PCA's
+# train.cut$classe = train.class #add back in classification column
+# 
+# set.seed(1224)
+# fit = randomForest(classe~., data=train.cut,
+#                importance = TRUE, ntree = 130)
+# predictions = predict(fit, newdata = test)
+# predictions
 ```
 
 
