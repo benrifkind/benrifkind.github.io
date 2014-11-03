@@ -2,8 +2,8 @@
 
 title:            This is a website 
 locale:           en_US
-#url:              http://localhost:4000
-url:              http://benrifkind.github.io
+url:              http://localhost:4000
+#url:              http://benrifkind.github.io
 
 # Jekyll configuration
 
@@ -27,7 +27,7 @@ kramdown:
 # Site owner
 owner:
   name: Ben Rifkind
-  avatar: BenR2.jpg
+  avatar: BenR3.jpg
   bio: "I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis."
   email: 
   disqus-shortname: 
