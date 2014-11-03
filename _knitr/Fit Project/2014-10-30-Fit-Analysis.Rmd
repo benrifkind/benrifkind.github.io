@@ -13,6 +13,7 @@ The [random forest](http://cran.r-project.org/web/packages/randomForest/index.ht
 ```{r, message = FALSE}
 library(randomForest)
 library(ggplot2)
+library(caret)
 ```
 Read in the training and testing data
 ```{r}
@@ -51,7 +52,7 @@ no.use.col = bad.cols(train)
 no.use.col = c(1:7, no.use.col)
 no.use.col
 ```
-Now I prepare the data by separating out the classification column and removing the unnecessary columns. Since the classification column will not be used for analysis I remove it.
+Now I prepare the data by separating out the classification column and removing the unnecessary columns. Since the classification column will not be used for analysis I remove it and keep track of it for later.
 ```{r}
 train.class = as.factor(train$classe)
 
@@ -61,10 +62,10 @@ train$classe = NULL
 test = test[, -no.use.col]
 test$problem_id = NULL
 ```
-I did everything by hand and didn't use the caret package. Not the smartest way to do things. I am
+I am
 using PCA to reduce dimensionality. First have to center and rescale the data. The centering and scaling comes from the training data. I use the same centering and rescaling for the test data.
 ```{r}
-#calculate mean and sds for each column of train
+#calculate mean and standard deviations for each column of train
 means = colMeans(train)
 sds = apply(train, 2, sd)
 
@@ -85,16 +86,28 @@ the data well?
 qplot(PC1, PC2, data = train, colour = train.class)
 ```
 
-I did some analysis to find how many PC's were necessary by splitting the train data into training and validation data. This is probably not a good idea since I calculated means and sd's for the full train set. Should have split the data up top. 
+
+Now use the random forest to predict. I split the data into train (80%) and validation (20%) pieces. I ran random forest on the train set, used the model to predict on the validation set and calculated the error between the predicted and actual values.
+
 ```{r}
-# train.cut = train[, c(1:25)] #use only a few of PCA's
-# train.cut$classe = train.class #add back in classification column
-# 
-# set.seed(1224)
-# fit = randomForest(classe~., data=train.cut,
-#                importance = TRUE, ntree = 130)
-# predictions = predict(fit, newdata = test)
-# predictions
+train.cut = train[, c(1:25)] #use only a few of PCA's
+
+set.seed(1224)
+
+#split the data
+index = sample(nrow(train.cut), size = 0.8*nrow(train.cut))
+X = train.cut[index, ]
+validation = train.cut[-index,]
+
+#fit the model
+fit = randomForest(X, train.class[index],
+               importance = TRUE, ntree = 130)
+predictions = predict(fit, newdata = validation)
 ```
 
+Table of predictions on validation set against actual values and calculated cross-tabulation of observed and predicted classed.
+```{r}
+predict.table = table(predict = predictions, true = train.class[-index])
+confusionMatrix(predict.table)
 
+```

@@ -4,7 +4,7 @@
 <generator uri="https://github.com/jekyll/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml" />
 <link rel="alternate" type="text/html" href="http://localhost:4000" />
-<updated>2014-11-02T21:29:55-05:00</updated>
+<updated>2014-11-03T15:34:19-05:00</updated>
 <id>http://localhost:4000/</id>
 <author>
   <name>Ben Rifkind</name>
@@ -16,9 +16,9 @@
   
 
 <entry>
-  <title type="html"><![CDATA[Fit Analysis]]></title>
-  <link rel="alternate" type="text/html" href="http://localhost:4000/Fit-Analysis/" />
-  <id>http://localhost:4000/Fit-Analysis</id>
+  <title type="html"><![CDATA[Analysis of Bicep Curl Quality]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/Analysis-of-Bicep-Curl-Quality/" />
+  <id>http://localhost:4000/Analysis-of-Bicep-Curl-Quality</id>
   <published>2014-10-30T00:00:00-04:00</published>
   <updated>2014-10-30T00:00:00-04:00</updated>
   <author>
@@ -26,17 +26,22 @@
     <uri>http://localhost:4000</uri>
     
   </author>
-  <content type="html">
+  <content type="html">&lt;p&gt;For my first post I thought I’d write about some basic data classification. I’ve been going through the courses given by Carnegie Melon in the &lt;a href=&quot;https://www.coursera.org/specialization/jhudatascience/1&quot;&gt;Data Science Specialization Stream&lt;/a&gt; to learn R and some 
+introductory data science techniques. I recommend it. &lt;/p&gt;
+
+&lt;p&gt;Anyway, for the &lt;a href=&quot;https://class.coursera.org/predmachlearn-006&quot;&gt;Practical Machine Learning Course&lt;/a&gt; they asked us to classify the how well people were performing bicep curls. The data as well as the explanation of the problem is &lt;a href=&quot;http://groupware.les.inf.puc-rio.br/har&quot;&gt;here&lt;/a&gt;. We have data taken from subjects wearing sensors while they perform a bicep curl with five differing techniques (“A”, “B”, “C”, “D”, “E”). “A” corresponds to a “proper” bicep curl and the rest are differing bad techniques. The goal is to use this data to construct a classifier that can then predict the type of bicep curl using only the sensory data.   &lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&quot;http://cran.r-project.org/web/packages/randomForest/index.html&quot;&gt;random forest&lt;/a&gt; worked extremely well for this. &lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;randomForest&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ggplot2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ggplot2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;caret&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Read in the training and testing data&lt;/p&gt;
+&lt;p&gt;Read in the training data&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;train &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; read.csv&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;pml-training.csv&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; stringsAsFactors &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-test &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; read.csv&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;pml-testing.csv&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; stringsAsFactors &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;train &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; read.csv&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;pml-training.csv&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; stringsAsFactors &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;I wrote a function to find the indices of the columns in the training data which do have not
-enough data. They need to have more than 406 entries which are not blank or NA.&lt;/p&gt;
+&lt;p&gt;There were a lot of columns which had many NA values and/or just missing data. I wrote a function to find the indices of these ‘useless’ columns. From inspecting the columns it seemed appropriate to remove those which did not have more than 406 entries which are not blank or NA.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#function to find index of columns with very little usable data&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;#from training data (blanks and NA&amp;#39;s)&lt;/span&gt;
@@ -75,58 +80,91 @@ no.use.col&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 ##  [86]  71  72  73  74  87  88  89  90  91  92  95  98 101 125 126 127 128
 ## [103] 129 130 133 136 139&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Now I prepare the data by separating out the classification column and removing the unnecessary columns. Since the classification column will not be used for analysis I remove it.&lt;/p&gt;
+&lt;p&gt;Now I prepare the data by separating out the classification column and removing the unnecessary columns. Since the classification column will not be used for analysis I remove it and keep track of it for later.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;train.class &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;train&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;classe&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 train &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; train&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;no.use.col&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-train&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;classe &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;NULL&lt;/span&gt;
+train&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;classe &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;NULL&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-test &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;no.use.col&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-test&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;problem_id &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;NULL&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I am
+using PCA to reduce dimensionality. First have to center and rescale the data. The centering and scaling comes from the training data.&lt;/p&gt;
 
-&lt;p&gt;I did everything by hand and didn’t use the caret package. Not the smartest way to do things. I am
-using PCA to reduce dimensionality. First have to center and rescale the data. The centering and scaling comes from the training data. I use the same centering and rescaling for the test data.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#calculate mean and sds for each column of train&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#calculate mean and standard deviations for each column of train&lt;/span&gt;
 means &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;colMeans&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;train&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 sds &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;train&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; sd&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;#center and rescale&lt;/span&gt;
 train &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;train&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; means&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;sds&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-test &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;test&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; means&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;sds&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;#do PCA&lt;/span&gt;
 train.prcomp &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; prcomp&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;train&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; center &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;#predict using PCA&lt;/span&gt;
-train &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;predict&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;train.prcomp&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; newdata &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; train&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-test &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;predict&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;train.prcomp&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; newdata &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+train &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;predict&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;train.prcomp&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; newdata &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; train&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;A plot of the first two principal components of the training set. Do they separate 
-the data well?&lt;/p&gt;
+the data well? I don’t really see good separation…&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;qplot&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;PC1&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; PC2&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; train&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; colour &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; train.class&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;/../figs/2014-10-30-Fit-Analysis/unnamed-chunk-7-1.png&quot; alt=&quot;center&quot; /&gt; &lt;/p&gt;
 
-&lt;p&gt;I did some analysis to find how many PC’s were necessary by splitting the train data into training and validation data. This is probably not a good idea since I calculated means and sd’s for the full train set. Should have split the data up top. &lt;/p&gt;
+&lt;p&gt;Now use the random forest to predict. I split the data into train (80%) and validation (20%) pieces. I ran random forest on the train set, used the model to predict on the validation set and calculated the error between the predicted and actual values.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;train.cut &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; train&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#use only a few of PCA&amp;#39;s&lt;/span&gt;
-train.cut&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;classe &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; train.class &lt;span class=&quot;c1&quot;&gt;#add back in classification column&lt;/span&gt;
 
 &lt;span class=&quot;kp&quot;&gt;set.seed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1224&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-fit &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; randomForest&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;classe&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; data&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;train.cut&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#split the data&lt;/span&gt;
+index &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sample&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;nrow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;train.cut&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; size &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0.8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;nrow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;train.cut&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+X &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; train.cut&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;index&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+validation &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; train.cut&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;index&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#fit the model&lt;/span&gt;
+fit &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; randomForest&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;X&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; train.class&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;index&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
                importance &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; ntree &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;130&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-predictions &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; predict&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fit&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; newdata &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-predictions&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+predictions &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; predict&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fit&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; newdata &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; validation&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;##  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 
-##  B  A  B  A  A  E  D  B  A  A  B  C  B  A  E  E  A  B  B  B 
-## Levels: A B C D E&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Table of predictions on validation set against actual values and calculated cross-tabulation of observed and predicted classed.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;predict.table &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;predict &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; predictions&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; true &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; train.class&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;index&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+confusionMatrix&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;predict.table&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;## Confusion Matrix and Statistics
+## 
+##        true
+## predict    A    B    C    D    E
+##       A 1128   13    2    0    0
+##       B    3  750    9    0    2
+##       C    3    6  676   27    9
+##       D    0    1    7  591    4
+##       E    0    1    3    4  686
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.9761          
+##                  95% CI : (0.9708, 0.9806)
+##     No Information Rate : 0.2889          
+##     P-Value [Acc &amp;gt; NIR] : &amp;lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.9696          
+##  Mcnemar&amp;#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: A Class: B Class: C Class: D Class: E
+## Sensitivity            0.9947   0.9728   0.9699   0.9502   0.9786
+## Specificity            0.9946   0.9956   0.9861   0.9964   0.9975
+## Pos Pred Value         0.9869   0.9817   0.9376   0.9801   0.9885
+## Neg Pred Value         0.9978   0.9934   0.9934   0.9907   0.9954
+## Prevalence             0.2889   0.1964   0.1776   0.1585   0.1786
+## Detection Rate         0.2874   0.1911   0.1722   0.1506   0.1748
+## Detection Prevalence   0.2912   0.1946   0.1837   0.1536   0.1768
+## Balanced Accuracy      0.9947   0.9842   0.9780   0.9733   0.9881&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/Fit-Analysis/&quot;&gt;Fit Analysis&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://localhost:4000&quot;&gt;This is a website&lt;/a&gt; on October 30, 2014.&lt;/p&gt;</content>
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/Analysis-of-Bicep-Curl-Quality/&quot;&gt;Analysis of Bicep Curl Quality&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://localhost:4000&quot;&gt;This is a website&lt;/a&gt; on October 30, 2014.&lt;/p&gt;</content>
 </entry>
 
 </feed>
