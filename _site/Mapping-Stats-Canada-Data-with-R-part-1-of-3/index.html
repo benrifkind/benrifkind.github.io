@@ -1,0 +1,247 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Mapping Stats Canada Data with R part 1 of 3 &#8211; This is a website</title>
+<meta name="description" content="Introduction
+I applied to the Insight data science program pretty much immediately after I finished my phD in September. I didn’t have much programming experience (still don’t) but I was learning R and wanted to do something to showcase what I had learnt. I settled on doing a map of the densities of the different ethnic groups in Canada by census division. I just thought it would be interesting to see where different immigrant communities settle. 
+
+">
+<meta name="keywords" content="">
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Mapping Stats Canada Data with R part 1 of 3">
+<meta name="twitter:description" content="Introduction
+I applied to the Insight data science program pretty much immediately after I finished my phD in September. I didn’t have much programming experience (still don’t) but I was learning R and wanted to do something to showcase what I had learnt. I settled on doing a map of the densities of the different ethnic groups in Canada by census division. I just thought it would be interesting to see where different immigrant communities settle. 
+
+">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/images/default-thumb.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mapping Stats Canada Data with R part 1 of 3">
+<meta property="og:description" content="Introduction
+I applied to the Insight data science program pretty much immediately after I finished my phD in September. I didn’t have much programming experience (still don’t) but I was learning R and wanted to do something to showcase what I had learnt. I settled on doing a map of the densities of the different ethnic groups in Canada by census division. I just thought it would be interesting to see where different immigrant communities settle. 
+
+">
+<meta property="og:url" content="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3/">
+<meta property="og:site_name" content="This is a website">
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3/">
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="This is a website Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="http://localhost:4000/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="http://localhost:4000/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="http://localhost:4000/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://localhost:4000/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body class="post">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="http://localhost:4000">This is a website</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav">
+		    <ul>
+		        
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/about/" >About</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/posts/" >Posts</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/resume/" >Research</a></li>
+					  
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+
+
+
+	<img src="http://localhost:4000/images/BenR3.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+
+<h3>Ben Rifkind</h3>
+<p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
+
+
+
+
+
+
+
+<a href="http://github.com/benrifkind" class="author-social" target="_blank"><i class="fa fa-fw fa-github"></i> Github</a>
+
+
+
+
+
+
+
+
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3/" rel="bookmark" title="Mapping Stats Canada Data with R part 1 of 3">Mapping Stats Canada Data with R part 1 of 3</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <h1 id="introduction">Introduction</h1>
+<p>I applied to the <a href="http://insightdatascience.com/">Insight data science program</a> pretty much immediately after I finished my phD in September. I didn’t have much programming experience (still don’t) but I was learning R and wanted to do something to showcase what I had learnt. I settled on doing a map of the densities of the different ethnic groups in Canada by census division. I just thought it would be interesting to see where different immigrant communities settle. </p>
+
+<p>There were three basic parts to this project. </p>
+
+<ol>
+  <li>Get the data from Stats Canada. This was not one simple download. I used <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a> to scrape the Stats Canada web site.</li>
+  <li>Organize and do the actual mapping. This was some simple R code along with learning a little bit of <a href="http://cran.r-project.org/web/packages/ggmap/ggmap.pdf">ggmaps</a></li>
+  <li>Construct an interactive map online. I used the <a href="http://shiny.rstudio.com/">Shiny</a> web application framework for R for this.</li>
+</ol>
+
+<p>Three different parts to that project add up to three different parts to this post.</p>
+
+<h1 id="part-1---web-scraping-stats-canada">Part 1 - Web Scraping Stats Canada</h1>
+
+<p>I went to <a href="http://www.statcan.gc.ca/start-debut-eng.html">the Stats Canada web site</a> to look for this data. Unfortunately the long form census was discontinued in 2011, so I had to rely on the 2006 census. I focused on the ethnic characteristics of the questionnaire. This is a <a href="http://www12.statcan.gc.ca/census-recensement/2006/dp-pd/tbt/Rp-eng.cfm?LANG=E&amp;APATH=3&amp;DETAIL=0&amp;DIM=0&amp;FL=A&amp;FREE=0&amp;GC=0&amp;GID=0&amp;GK=0&amp;GRP=1&amp;PID=99015&amp;PRID=0&amp;PTYPE=88971,97154&amp;S=0&amp;SHOWALL=0&amp;SUB=0&amp;Temporal=2006&amp;THEME=70&amp;VID=0&amp;VNAMEE=&amp;VNAMEF=">link</a> to the stats that I was looking at aggregated over all of Canada. I wanted the data for each census division which for some reason Stats Canada did not make available as one single download. I would have had to click through each division <a href="http://www12.statcan.gc.ca/census-recensement/2006/dp-pd/tbt/Geo-index-eng.cfm?TABID=5&amp;LANG=E&amp;APATH=3&amp;DETAIL=0&amp;DIM=0&amp;FL=A&amp;FREE=0&amp;GC=0&amp;GID=0&amp;GK=0&amp;GRP=1&amp;PID=99015&amp;PRID=0&amp;PTYPE=88971,97154&amp;S=0&amp;SHOWALL=0&amp;SUB=0&amp;Temporal=2006&amp;THEME=70&amp;VID=0&amp;VNAMEE=&amp;VNAMEF=&amp;D1=0&amp;D2=0&amp;D3=0&amp;D4=0&amp;D5=0&amp;D6=0">here</a> in order to retrieve all the data. So of course what I did instead was I scraped the data from that page using python, regular expressions, and BeautifulSoup.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">httplib2</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span><span class="p">,</span> <span class="n">SoupStrainer</span></code></pre></div>
+
+<p>I started at the <a href="http://www12.statcan.gc.ca/census-recensement/2006/dp-pd/tbt/Geo-index-eng.cfm?TABID=5&amp;LANG=E&amp;APATH=3&amp;DETAIL=0&amp;DIM=0&amp;FL=A&amp;FREE=0&amp;GC=0&amp;GID=0&amp;GK=0&amp;GRP=1&amp;PID=99015&amp;PRID=0&amp;PTYPE=88971,97154&amp;S=0&amp;SHOWALL=0&amp;SUB=0&amp;Temporal=2006&amp;THEME=70&amp;VID=0&amp;VNAMEE=&amp;VNAMEF=&amp;D1=0&amp;D2=0&amp;D3=0&amp;D4=0&amp;D5=0&amp;D6=0">base page</a> and took a look at the html code to see what all the census division links had in common. Turns out they were all of class, “indent-3” and of type “li”. I “strained” all the links of that type</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#the base page</span>
+<span class="n">base_page</span> <span class="o">=</span> <span class="s">&quot;http://www12.statcan.gc.ca/census-recensement/2006/dp-pd/tbt/Geo-index-eng.cfm?TABID=5&amp;LANG=E&amp;APATH=3&amp;DETAIL=0&amp;DIM=0&amp;FL=A&amp;FREE=0&amp;GC=0&amp;GID=0&amp;GK=0&amp;GRP=1&amp;PID=99015&amp;PRID=0&amp;PTYPE=88971,97154&amp;S=0&amp;SHOWALL=0&amp;SUB=0&amp;Temporal=2006&amp;THEME=70&amp;VID=0&amp;VNAMEE=&amp;VNAMEF=&amp;D1=0&amp;D2=0&amp;D3=0&amp;D4=0&amp;D5=0&amp;D6=0&quot;</span>
+
+<span class="c">#get the links</span>
+<span class="n">http</span> <span class="o">=</span> <span class="n">httplib2</span><span class="o">.</span><span class="n">Http</span><span class="p">()</span>
+<span class="n">status</span><span class="p">,</span> <span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">base_page</span><span class="p">)</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="n">links</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">&quot;li&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s">&quot;indent-3&quot;</span><span class="p">)</span></code></pre></div>
+
+
+      <hr />
+      <footer role="contentinfo">
+        <div class="article-author-bottom">
+          
+
+
+
+	<img src="http://localhost:4000/images/BenR3.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+
+<h3>Ben Rifkind</h3>
+<p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
+
+
+
+
+
+
+
+<a href="http://github.com/benrifkind" class="author-social" target="_blank"><i class="fa fa-fw fa-github"></i> Github</a>
+
+
+
+
+
+
+
+
+        </div>
+        <p class="byline"><strong>Mapping Stats Canada Data with R part 1 of 3</strong> was published on <time datetime="2014-11-01T00:00:00-04:00">November 01, 2014</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="http://localhost:4000/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+      <li><a href="http://localhost:4000/Analysis-of-Bicep-Curl-Quality/" title="Analysis of Bicep Curl Quality">Analysis of Bicep Curl Quality</a></li>
+    
+    </ul>
+    <hr />
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>&copy; 2014 Ben Rifkind. Powered by <a href="http://jekyllrb.com">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://localhost:4000/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://localhost:4000/assets/js/scripts.min.js"></script>
+
+	        
+
+</body>
+</html>

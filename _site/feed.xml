@@ -4,13 +4,64 @@
 <generator uri="https://github.com/jekyll/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml" />
 <link rel="alternate" type="text/html" href="http://localhost:4000" />
-<updated>2014-11-03T15:34:19-05:00</updated>
+<updated>2014-11-06T21:44:32-05:00</updated>
 <id>http://localhost:4000/</id>
 <author>
   <name>Ben Rifkind</name>
   <uri>http://localhost:4000/</uri>
   
 </author>
+
+
+  
+
+<entry>
+  <title type="html"><![CDATA[Mapping Stats Canada Data with R part 1 of 3]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3/" />
+  <id>http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3</id>
+  <published>2014-11-01T00:00:00-04:00</published>
+  <updated>2014-11-01T00:00:00-04:00</updated>
+  <author>
+    <name>Ben Rifkind</name>
+    <uri>http://localhost:4000</uri>
+    
+  </author>
+  <content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;I applied to the &lt;a href=&quot;http://insightdatascience.com/&quot;&gt;Insight data science program&lt;/a&gt; pretty much immediately after I finished my phD in September. I didn’t have much programming experience (still don’t) but I was learning R and wanted to do something to showcase what I had learnt. I settled on doing a map of the densities of the different ethnic groups in Canada by census division. I just thought it would be interesting to see where different immigrant communities settle. &lt;/p&gt;
+
+&lt;p&gt;There were three basic parts to this project. &lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Get the data from Stats Canada. This was not one simple download. I used &lt;a href=&quot;http://www.crummy.com/software/BeautifulSoup/&quot;&gt;BeautifulSoup&lt;/a&gt; to scrape the Stats Canada web site.&lt;/li&gt;
+  &lt;li&gt;Organize and do the actual mapping. This was some simple R code along with learning a little bit of &lt;a href=&quot;http://cran.r-project.org/web/packages/ggmap/ggmap.pdf&quot;&gt;ggmaps&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Construct an interactive map online. I used the &lt;a href=&quot;http://shiny.rstudio.com/&quot;&gt;Shiny&lt;/a&gt; web application framework for R for this.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Three different parts to that project add up to three different parts to this post.&lt;/p&gt;
+
+&lt;h1 id=&quot;part-1---web-scraping-stats-canada&quot;&gt;Part 1 - Web Scraping Stats Canada&lt;/h1&gt;
+
+&lt;p&gt;I went to &lt;a href=&quot;http://www.statcan.gc.ca/start-debut-eng.html&quot;&gt;the Stats Canada web site&lt;/a&gt; to look for this data. Unfortunately the long form census was discontinued in 2011, so I had to rely on the 2006 census. I focused on the ethnic characteristics of the questionnaire. This is a &lt;a href=&quot;http://www12.statcan.gc.ca/census-recensement/2006/dp-pd/tbt/Rp-eng.cfm?LANG=E&amp;amp;APATH=3&amp;amp;DETAIL=0&amp;amp;DIM=0&amp;amp;FL=A&amp;amp;FREE=0&amp;amp;GC=0&amp;amp;GID=0&amp;amp;GK=0&amp;amp;GRP=1&amp;amp;PID=99015&amp;amp;PRID=0&amp;amp;PTYPE=88971,97154&amp;amp;S=0&amp;amp;SHOWALL=0&amp;amp;SUB=0&amp;amp;Temporal=2006&amp;amp;THEME=70&amp;amp;VID=0&amp;amp;VNAMEE=&amp;amp;VNAMEF=&quot;&gt;link&lt;/a&gt; to the stats that I was looking at aggregated over all of Canada. I wanted the data for each census division which for some reason Stats Canada did not make available as one single download. I would have had to click through each division &lt;a href=&quot;http://www12.statcan.gc.ca/census-recensement/2006/dp-pd/tbt/Geo-index-eng.cfm?TABID=5&amp;amp;LANG=E&amp;amp;APATH=3&amp;amp;DETAIL=0&amp;amp;DIM=0&amp;amp;FL=A&amp;amp;FREE=0&amp;amp;GC=0&amp;amp;GID=0&amp;amp;GK=0&amp;amp;GRP=1&amp;amp;PID=99015&amp;amp;PRID=0&amp;amp;PTYPE=88971,97154&amp;amp;S=0&amp;amp;SHOWALL=0&amp;amp;SUB=0&amp;amp;Temporal=2006&amp;amp;THEME=70&amp;amp;VID=0&amp;amp;VNAMEE=&amp;amp;VNAMEF=&amp;amp;D1=0&amp;amp;D2=0&amp;amp;D3=0&amp;amp;D4=0&amp;amp;D5=0&amp;amp;D6=0&quot;&gt;here&lt;/a&gt; in order to retrieve all the data. So of course what I did instead was I scraped the data from that page using python, regular expressions, and BeautifulSoup.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;httplib2&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;urllib&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;re&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;bs4&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeautifulSoup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SoupStrainer&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I started at the &lt;a href=&quot;http://www12.statcan.gc.ca/census-recensement/2006/dp-pd/tbt/Geo-index-eng.cfm?TABID=5&amp;amp;LANG=E&amp;amp;APATH=3&amp;amp;DETAIL=0&amp;amp;DIM=0&amp;amp;FL=A&amp;amp;FREE=0&amp;amp;GC=0&amp;amp;GID=0&amp;amp;GK=0&amp;amp;GRP=1&amp;amp;PID=99015&amp;amp;PRID=0&amp;amp;PTYPE=88971,97154&amp;amp;S=0&amp;amp;SHOWALL=0&amp;amp;SUB=0&amp;amp;Temporal=2006&amp;amp;THEME=70&amp;amp;VID=0&amp;amp;VNAMEE=&amp;amp;VNAMEF=&amp;amp;D1=0&amp;amp;D2=0&amp;amp;D3=0&amp;amp;D4=0&amp;amp;D5=0&amp;amp;D6=0&quot;&gt;base page&lt;/a&gt; and took a look at the html code to see what all the census division links had in common. Turns out they were all of class, “indent-3” and of type “li”. I “strained” all the links of that type&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;#the base page&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;base_page&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;http://www12.statcan.gc.ca/census-recensement/2006/dp-pd/tbt/Geo-index-eng.cfm?TABID=5&amp;amp;LANG=E&amp;amp;APATH=3&amp;amp;DETAIL=0&amp;amp;DIM=0&amp;amp;FL=A&amp;amp;FREE=0&amp;amp;GC=0&amp;amp;GID=0&amp;amp;GK=0&amp;amp;GRP=1&amp;amp;PID=99015&amp;amp;PRID=0&amp;amp;PTYPE=88971,97154&amp;amp;S=0&amp;amp;SHOWALL=0&amp;amp;SUB=0&amp;amp;Temporal=2006&amp;amp;THEME=70&amp;amp;VID=0&amp;amp;VNAMEE=&amp;amp;VNAMEF=&amp;amp;D1=0&amp;amp;D2=0&amp;amp;D3=0&amp;amp;D4=0&amp;amp;D5=0&amp;amp;D6=0&amp;quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#get the links&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;httplib2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;base_page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;soup&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeautifulSoup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;links&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;soup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;li&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;class_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;indent-3&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3/&quot;&gt;Mapping Stats Canada Data with R part 1 of 3&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://localhost:4000&quot;&gt;This is a website&lt;/a&gt; on November 01, 2014.&lt;/p&gt;</content>
+</entry>
 
 
   
