@@ -41,7 +41,7 @@ links = soup.find_all("li", class_ = re.compile('indent-[1|3]'))
 
 I still wasn't there yet. These links just take me to another page where I have the option to click on a link to download the csv files. But I noticed that these new links are of the form begin + PID + "&"" + GID +end, where begin and end are some fixed string and PID and GID are information contained in the link. So I wrote a function to extract the link to download the csv files from the first link.
 
-{% highlight python}
+{% highlight python %}
 def get_csv_link(weblink):
     #extract the pid and gid from the link
     PID = re.search("PID=\d+", weblink).group()
