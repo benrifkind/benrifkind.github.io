@@ -6,9 +6,8 @@
 <head>
 <meta charset="utf-8">
 <title>Analysis of Bicep Curl Quality &#8211; This is a website</title>
-<meta name="description" content="For my first post I thought I’d write about some basic data classification. I’ve been going through the courses given by Carnegie Melon in the Data Science Specialization Stream to learn R and some 
+<meta name="description" content="For my first post I thought I&#39;d write about some basic data classification. I&#39;ve been going through the courses given by Carnegie Melon in the Data Science Specialization Stream to learn R and some 
 introductory data science techniques. I recommend it. 
-
 ">
 <meta name="keywords" content="">
 
@@ -16,9 +15,8 @@ introductory data science techniques. I recommend it.
 
 <!-- Twitter Cards -->
 <meta name="twitter:title" content="Analysis of Bicep Curl Quality">
-<meta name="twitter:description" content="For my first post I thought I’d write about some basic data classification. I’ve been going through the courses given by Carnegie Melon in the Data Science Specialization Stream to learn R and some 
+<meta name="twitter:description" content="For my first post I thought I&#39;d write about some basic data classification. I&#39;ve been going through the courses given by Carnegie Melon in the Data Science Specialization Stream to learn R and some 
 introductory data science techniques. I recommend it. 
-
 ">
 
 
@@ -30,9 +28,8 @@ introductory data science techniques. I recommend it.
 <meta property="og:locale" content="en_US">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Analysis of Bicep Curl Quality">
-<meta property="og:description" content="For my first post I thought I’d write about some basic data classification. I’ve been going through the courses given by Carnegie Melon in the Data Science Specialization Stream to learn R and some 
+<meta property="og:description" content="For my first post I thought I&#39;d write about some basic data classification. I&#39;ve been going through the courses given by Carnegie Melon in the Data Science Specialization Stream to learn R and some 
 introductory data science techniques. I recommend it. 
-
 ">
 <meta property="og:url" content="http://localhost:4000/Analysis-of-Bicep-Curl-Quality/">
 <meta property="og:site_name" content="This is a website">
@@ -122,7 +119,7 @@ introductory data science techniques. I recommend it.
 
 
 
-	<img src="http://localhost:4000/images/BenR3.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+	<img src="http://localhost:4000/images/BenR2.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
 
 <h3>Ben Rifkind</h3>
 <p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
@@ -150,10 +147,10 @@ introductory data science techniques. I recommend it.
       
     </div><!--/ .headline-wrap -->
     <div class="article-wrap">
-      <p>For my first post I thought I’d write about some basic data classification. I’ve been going through the courses given by Carnegie Melon in the <a href="https://www.coursera.org/specialization/jhudatascience/1">Data Science Specialization Stream</a> to learn R and some 
+      <p>For my first post I thought I&#39;d write about some basic data classification. I&#39;ve been going through the courses given by Carnegie Melon in the <a href="https://www.coursera.org/specialization/jhudatascience/1">Data Science Specialization Stream</a> to learn R and some 
 introductory data science techniques. I recommend it. </p>
 
-<p>Anyway, for the <a href="https://class.coursera.org/predmachlearn-006">Practical Machine Learning Course</a> they asked us to classify the how well people were performing bicep curls. The data as well as the explanation of the problem is <a href="http://groupware.les.inf.puc-rio.br/har">here</a>. We have data taken from subjects wearing sensors while they perform a bicep curl with five differing techniques (“A”, “B”, “C”, “D”, “E”). “A” corresponds to a “proper” bicep curl and the rest are differing bad techniques. The goal is to use this data to construct a classifier that can then predict the type of bicep curl using only the sensory data.   </p>
+<p>Anyway, for the <a href="https://class.coursera.org/predmachlearn-006">Practical Machine Learning Course</a> they asked us to classify the how well people were performing bicep curls. The data as well as the explanation of the problem is <a href="http://groupware.les.inf.puc-rio.br/har">here</a>. We have data taken from subjects wearing sensors while they perform a bicep curl with five differing techniques (&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;). &quot;A&quot; corresponds to a &quot;proper&quot; bicep curl and the rest are differing bad techniques. The goal is to use this data to construct a classifier that can then predict the type of bicep curl using only the sensory data.   </p>
 
 <p>The <a href="http://cran.r-project.org/web/packages/randomForest/index.html">random forest</a> worked extremely well for this. </p>
 
@@ -165,7 +162,7 @@ introductory data science techniques. I recommend it. </p>
 
 <div class="highlight"><pre><code class="language-r" data-lang="r">train <span class="o">=</span> read.csv<span class="p">(</span><span class="s">&quot;pml-training.csv&quot;</span><span class="p">,</span> stringsAsFactors <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span></code></pre></div>
 
-<p>There were a lot of columns which had many NA values and/or just missing data. I wrote a function to find the indices of these ‘useless’ columns. From inspecting the columns it seemed appropriate to remove those which did not have more than 406 entries which are not blank or NA.</p>
+<p>There were a lot of columns which had many NA values and/or just missing data. I wrote a function to find the indices of these &#39;useless&#39; columns. From inspecting the columns it seemed appropriate to remove those which did not have more than 406 entries which are not blank or NA.</p>
 
 <div class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1">#function to find index of columns with very little usable data</span>
 <span class="c1">#from training data (blanks and NA&#39;s)</span>
@@ -228,11 +225,11 @@ train.prcomp <span class="o">=</span> prcomp<span class="p">(</span>train<span c
 train <span class="o">=</span> <span class="kp">as.data.frame</span><span class="p">(</span>predict<span class="p">(</span>train.prcomp<span class="p">,</span> newdata <span class="o">=</span> train<span class="p">))</span></code></pre></div>
 
 <p>A plot of the first two principal components of the training set. Do they separate 
-the data well? I don’t really see good separation…</p>
+the data well? I don&#39;t really see good separation...</p>
 
 <div class="highlight"><pre><code class="language-r" data-lang="r">qplot<span class="p">(</span>PC1<span class="p">,</span> PC2<span class="p">,</span> data <span class="o">=</span> train<span class="p">,</span> colour <span class="o">=</span> train.class<span class="p">)</span></code></pre></div>
 
-<p><img src="/../figs/2014-10-30-Fit-Analysis/unnamed-chunk-7-1.png" alt="center" /> </p>
+<p><img src="/../figs/2014-10-30-Fit-Analysis/unnamed-chunk-7-1.png" alt="center"> </p>
 
 <p>Now use the random forest to predict. I split the data into train (80%) and validation (20%) pieces. I ran random forest on the train set, used the model to predict on the validation set and calculated the error between the predicted and actual values.</p>
 
@@ -287,7 +284,6 @@ confusionMatrix<span class="p">(</span>predict.table<span class="p">)</span></co
 ## Detection Prevalence   0.2912   0.1946   0.1837   0.1536   0.1768
 ## Balanced Accuracy      0.9947   0.9842   0.9780   0.9733   0.9881</code></pre></div>
 
-
       <hr />
       <footer role="contentinfo">
         <div class="article-author-bottom">
@@ -295,7 +291,7 @@ confusionMatrix<span class="p">(</span>predict.table<span class="p">)</span></co
 
 
 
-	<img src="http://localhost:4000/images/BenR3.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+	<img src="http://localhost:4000/images/BenR2.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
 
 <h3>Ben Rifkind</h3>
 <p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
