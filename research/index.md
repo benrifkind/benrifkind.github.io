@@ -20,7 +20,7 @@ tags: [math, experience, resume]
 # Papers
 * [Diffusions of Multiplicative Cascades](http://arxiv.org/abs/1205.2413), Alberts T. & Rifkind B., *Stochastic Processes and their Applications*, **124**, no. 2, 1141-1169. (2014).
 
-* [The Shape of the Eigenvectors of the Random Schrödinger Operator (preprint)]({{ site.url }}/downloads/RSOEigenvectorsEditing.pdf), Rifkind, B. & Virág, B. 
+* [The Shape of the Eigenvectors of the Random Schrödinger Operator (preprint)]({{ site.url }}/downloads/RSOEigenvectors.pdf), Rifkind, B. & Virág, B. 
 
 # Talks
 
