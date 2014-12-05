@@ -10,4 +10,4 @@
   url: /research/
 
 - title: CV
-  url: {{ site.url }}/downloads/BenRifkindCV.pdf
+  url: /downloads/BenRifkindCV.pdf
