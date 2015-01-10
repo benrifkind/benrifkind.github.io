@@ -2,13 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
 <title type="text">This is a website</title>
 <generator uri="https://github.com/jekyll/jekyll">Jekyll</generator>
-<link rel="self" type="application/atom+xml" href="http://benrifkind.github.io/feed.xml" />
-<link rel="alternate" type="text/html" href="http://benrifkind.github.io" />
-<updated>2014-12-04T21:24:54-05:00</updated>
-<id>http://benrifkind.github.io/</id>
+<link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml" />
+<link rel="alternate" type="text/html" href="http://localhost:4000" />
+<updated>2015-01-09T19:11:22-05:00</updated>
+<id>http://localhost:4000/</id>
 <author>
   <name>Ben Rifkind</name>
-  <uri>http://benrifkind.github.io/</uri>
+  <uri>http://localhost:4000/</uri>
   
 </author>
 
@@ -16,14 +16,359 @@
   
 
 <entry>
+  <title type="html"><![CDATA[Water Usage in Toronto]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/Water-Usage-in-Toronto/" />
+  <id>http://localhost:4000/Water-Usage-in-Toronto</id>
+  <published>2015-01-07T00:00:00-05:00</published>
+  <updated>2015-01-07T00:00:00-05:00</updated>
+  <author>
+    <name>Ben Rifkind</name>
+    <uri>http://localhost:4000</uri>
+    
+  </author>
+  <content type="html">&lt;p&gt;This is just a quick writeup on how to use GIS files to visualize some data from &lt;a href=&quot;http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=9e56e03bb8d1e310VgnVCM10000071d60f89RCRD&quot;&gt;Open Data&lt;/a&gt;. The idea was to visualize the water consumption of the different wards of Toronto. I have a bit of an easy point to make. My guess is that that the richer you are the more water you consume. The water consumption of each ward is available &lt;a href=&quot;http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=289bd103cd8b1310VgnVCM1000003dd60f89RCRD&amp;amp;vgnextchannel=8517e03bb8d1e310VgnVCM10000071d60f89RCRD&quot;&gt;here&lt;/a&gt;.
+The data is water consumption for each ward from 2000 to 2013. &lt;/p&gt;
+
+&lt;p&gt;First I read in the data for 2000 and 2013.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;water.2000 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; read.csv&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;CoT_Water_Consumption/Water_Consumption_2000.csv&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; header &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+water.2013 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; read.csv&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;CoT_Water_Consumption/Water_Consumption_2013.csv&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; header &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There is data for commercial accounts and residential accounts. The ammounts are all in metres cubed. Here’s a quick look at the data for the first 3 wards.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;city.ward&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;year&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;residential.accounts&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;annual.residential.usage&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;average.residential.usage&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2000&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;8001&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3205060&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;400.58&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2000&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;9909&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3567371&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;360.01&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2000&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;10389&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2821739&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;271.61&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;city.ward&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;year&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;commercial.accounts&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;annual.commercial.usage&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;average.commercial.usage&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2000&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;148&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;4730288&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;31961.41&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2000&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;245&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;12607962&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;51461.07&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;2000&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;97&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;3094197&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;31898.94&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Here is a quick plot of average water consumption over the years. I faceted the data according to whether it was residential or commercial use.
+&lt;img src=&quot;/../figs/2015-01-07-Water-Usage-in-Toronto/unnamed-chunk-5-1.png&quot; alt=&quot;center&quot; /&gt; &lt;/p&gt;
+
+&lt;p&gt;So the ammount of average water consumption looks like it has been going down over the years. This is a little unexpected and heartening for me. I was also interested in seeing how the water consumption varies throughout the different wards of Toronto. Who is using the most water? I thought a good visualization of this would be to construct a heat map of the water consumption. To do this I used the GIS information for ward boundaries available at &lt;a href=&quot;http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=b1533f0aacaaa210VgnVCM1000006cd60f89RCRD&amp;amp;vgnextchannel=1a66e03bb8d1e310VgnVCM10000071d60f89RCRD&quot;&gt;open data Toronto&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;First read in the shape file and rotate it so that the topmost boundary is more or less flat. &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;maptools&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+ward.map &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; readShapeSpatial&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;gcc/icitw_wgs84.shp&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                               proj4string &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; CRS&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;+proj=longlat +datum=WGS84&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+ward.map &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; elide&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ward.map&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; rotate&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Next I use fortify to turn the spatial object into a data frame. Then I use ggplot to map it and the polygons that are the ward boundaries.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;rgeos&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+ward.map.df &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; fortify&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ward.map&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; region &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;SCODE_NAME&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+ward.map.df&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;id &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.integer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ward.map.df&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;id&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#fixes ward labels&lt;/span&gt;
+ggplot&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;data&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;ward.map.df&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; aes&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;long&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; y&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;lat&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; group&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;group&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
+  geom_polygon&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fill &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;NA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; colour &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;black&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
+  map.theme &lt;span class=&quot;c1&quot;&gt;#theme for map plots not defined here&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/../figs/2015-01-07-Water-Usage-in-Toronto/unnamed-chunk-8-1.png&quot; alt=&quot;center&quot; /&gt; &lt;/p&gt;
+
+&lt;p&gt;This looks very basic. I’ll add the ward numbers to each ward and make that heat map. The first step is to merge the water data and map data together. I also find the centroids of each polygon and label them according to the ward. I will use this labeling to identify the wards in the final plot.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# merge the water data and map data together&lt;/span&gt;
+total.df &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;merge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ward.map.df&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; water&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; by.x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;id&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; by.y &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;city.ward&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+total.df &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; total.df&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;total.df&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#find centroids of polygons for ward labelling&lt;/span&gt;
+centroids  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;as.data.frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;gCentroid&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ward.map&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; byid &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# keep track of which polygon the centroid is in&lt;/span&gt;
+centroids&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;id&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; ward.map&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;SCODE_NAME&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now I can make that heat map. Here are the residential maps. (I didn’t include the code for the 2013 map since it would be redundant.)&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;total.df.2000 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; total.df&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;total.df&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;year&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt;
+pAverageResidential &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; ggplot&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; total.df.2000&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; aes&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; long&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; y &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; lat&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; group &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; group&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
+  geom_polygon&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;aes&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fill &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; average.residential.usage&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; color &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;red&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; alpha &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+  scale_fill_gradient&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;name &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Average residential\nusage in metres cubed&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                      low &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;cyan3&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; high &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;blue3&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+  labs&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;title &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Average Toronto Residential Water Usage in 2000&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+pAverageResidential &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
+  map.theme &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#theme for a map plot I defined earlier&lt;/span&gt;
+  geom_text&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;aes&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;x&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;y&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;y&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; group&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; label&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;id&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; centroids&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; size&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#ward labels&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/../figs/2015-01-07-Water-Usage-in-Toronto/heatMaps-1.png&quot; alt=&quot;center&quot; /&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/../figs/2015-01-07-Water-Usage-in-Toronto/unnamed-chunk-10-1.png&quot; alt=&quot;Code not included&quot; /&gt; &lt;/p&gt;
+
+&lt;p&gt;So water consumption throughout Toronto has gone down but still the downtown core definitely seems to be using the most water. And in particular, ward 20, the Trinity-Spadina area of Toronto is using quite a bit more water per person than the rest of Toronto. I really don’t have any good idea why this might be. I initially thought the wealthier areas of Toronto would consume more water. The simplest factor I had in mind was swimming pools. But it looks like this does not matter so much.&lt;/p&gt;
+
+&lt;p&gt;Here are the maps for commercial water consumption.
+&lt;img src=&quot;/../figs/2015-01-07-Water-Usage-in-Toronto/unnamed-chunk-11-1.png&quot; alt=&quot;center&quot; /&gt; &lt;img src=&quot;/../figs/2015-01-07-Water-Usage-in-Toronto/unnamed-chunk-11-2.png&quot; alt=&quot;center&quot; /&gt; 
+It looks like ward 2, Etobicoke, is the heavy user of water commercially. Any ideas why this would be the case?&lt;/p&gt;
+
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/Water-Usage-in-Toronto/&quot;&gt;Water Usage in Toronto&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://localhost:4000&quot;&gt;This is a website&lt;/a&gt; on January 07, 2015.&lt;/p&gt;</content>
+</entry>
+
+
+  
+
+<entry>
+  <title type="html"><![CDATA[Mapping Stats Canada Data with R part 2 of 3]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-2-of-3/" />
+  <id>http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-2-of-3</id>
+  <published>2014-12-08T00:00:00-05:00</published>
+  <updated>2014-12-08T00:00:00-05:00</updated>
+  <author>
+    <name>Ben Rifkind</name>
+    <uri>http://localhost:4000</uri>
+    
+  </author>
+  <content type="html">&lt;p&gt;In this post I will reorganize the data that I have downloaded from the Stats Canada website so that I can start to work with it. Right now I have all census division files from Ontario in the folder “StatsCanadaData/Ontario” and in each file is a csv of all the statistics for that division. I want to extract some interesting  subset of each census division data frame (say country of origin of immigrants) and then merge all these divisions together so that I have one big data frame which I can then use to map and/or visualize the data.&lt;/p&gt;
+
+&lt;p&gt;First I need to clean up the csv files. They have a lot of footnotes and header information that I want to remove. The next few lines fix this. I read in the files from a particular province skipping the preamble and the footer, rename the columns, and cleanUp by removing the footnote numbering.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# Read files from a particular province&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# Output is a list of data frames&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# Skip first 4 rows and look at only 830 total rows of interest since end of file is notes&lt;/span&gt;
+getProvinceFiles &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;province&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+  province.dir &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;paste0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;StatsCanadaData/&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; province&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+  file.names &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;list.files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;province.dir&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; full.name &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;file.names&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;.csv&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;list.files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;province.dir&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; full.name &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;F&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+  temp &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sapply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;file.names&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; read.csv&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; skip &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; nrows &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;830&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                col.names &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Characteristics&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Total&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;English&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;French&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;English and French&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; 
+                header &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;F&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                simplify &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# add name of census division to data frame&lt;/span&gt;
+  &lt;span class=&quot;kr&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;k &lt;span class=&quot;kr&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;seq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;temp&lt;span class=&quot;p&quot;&gt;)))){&lt;/span&gt;
+    temp&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;k&lt;span class=&quot;p&quot;&gt;]][[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Division&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;temp&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;k&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# clean up Characteristics column&lt;/span&gt;
+  temp &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sapply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;temp&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; cleanUp&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; simplify &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+  temp
+  
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# gets rid of all the footnote numbering, $ signs I don&amp;#39;t like, and spacing issues at &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# the end of the word. &lt;/span&gt;
+ cleanUp &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;df&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+   column &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Characteristics&amp;quot;&lt;/span&gt;
+   df&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;column&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\[.+\\]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; df&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;column&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;
+   df&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;column&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;(\\$$)|(\\$\\s$)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;in CDN&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; df&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;column&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;
+   df&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;column&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\s+$&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; df&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;column&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;
+   df
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now I have a ‘nice’ list of data frames for each census division&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;ontario.data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; getProvinceFiles&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Ontario&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ontario.data&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;##  [1] &amp;quot;Algoma&amp;quot;                         &amp;quot;Brant&amp;quot;                         
+##  [3] &amp;quot;Bruce&amp;quot;                          &amp;quot;Chatham-Kent&amp;quot;                  
+##  [5] &amp;quot;Cochrane&amp;quot;                       &amp;quot;Dufferin&amp;quot;                      
+##  [7] &amp;quot;Durham&amp;quot;                         &amp;quot;Elgin&amp;quot;                         
+##  [9] &amp;quot;Essex&amp;quot;                          &amp;quot;Frontenac&amp;quot;                     
+## [11] &amp;quot;Greater Sudbury&amp;quot;                &amp;quot;Grey&amp;quot;                          
+## [13] &amp;quot;Haldimand-Norfolk&amp;quot;              &amp;quot;Haliburton&amp;quot;                    
+## [15] &amp;quot;Halton&amp;quot;                         &amp;quot;Hamilton&amp;quot;                      
+## [17] &amp;quot;Hastings&amp;quot;                       &amp;quot;Huron&amp;quot;                         
+## [19] &amp;quot;Kawartha Lakes&amp;quot;                 &amp;quot;Kenora&amp;quot;                        
+## [21] &amp;quot;Lambton&amp;quot;                        &amp;quot;Lanark&amp;quot;                        
+## [23] &amp;quot;Leeds and Grenville&amp;quot;            &amp;quot;Lennox and Addington&amp;quot;          
+## [25] &amp;quot;Manitoulin&amp;quot;                     &amp;quot;Middlesex&amp;quot;                     
+## [27] &amp;quot;Muskoka&amp;quot;                        &amp;quot;Niagara&amp;quot;                       
+## [29] &amp;quot;Nipissing&amp;quot;                      &amp;quot;Northumberland&amp;quot;                
+## [31] &amp;quot;Ottawa&amp;quot;                         &amp;quot;Oxford&amp;quot;                        
+## [33] &amp;quot;Parry Sound&amp;quot;                    &amp;quot;Peel&amp;quot;                          
+## [35] &amp;quot;Perth&amp;quot;                          &amp;quot;Peterborough&amp;quot;                  
+## [37] &amp;quot;Prescott and Russell&amp;quot;           &amp;quot;Prince Edward&amp;quot;                 
+## [39] &amp;quot;Rainy River&amp;quot;                    &amp;quot;Renfrew&amp;quot;                       
+## [41] &amp;quot;Simcoe&amp;quot;                         &amp;quot;Stormont, Dundas and Glengarry&amp;quot;
+## [43] &amp;quot;Sudbury&amp;quot;                        &amp;quot;Thunder Bay&amp;quot;                   
+## [45] &amp;quot;Timiskaming&amp;quot;                    &amp;quot;Toronto&amp;quot;                       
+## [47] &amp;quot;Waterloo&amp;quot;                       &amp;quot;Wellington&amp;quot;                    
+## [49] &amp;quot;York&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;kp&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ontario.data&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Algoma&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;##                  Characteristics  Total English French English.and.French
+## 1 Total population by age groups 116075   95735   8025                585
+## 2                   0 to 4 years   4890    4560    145                 50
+## 3                   5 to 9 years   5640    5220    225                  0
+## 4                 10 to 14 years   7285    6850    235                 10
+## 5                 15 to 19 years   8005    7435    340                 45
+## 6                 20 to 24 years   6695    6195    265                 75
+##   Division
+## 1   Algoma
+## 2   Algoma
+## 3   Algoma
+## 4   Algoma
+## 5   Algoma
+## 6   Algoma&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;A word as to how the data frame is organized. Basically there are a bunch of categories in the census for the statistic (income, education, labour) and then there are subcategories and sub-sub-categories. The way that this is organized in the data frame is via the number of spaces before the entry. 0 spaces for head of the category, 2 spaces for the subcategory, 4 spaces for the sub-subcategory, etc. I wrote functions in order to extract the top categories and also the statistics for a given category and its subcategories.&lt;/p&gt;
+
+&lt;p&gt;The first function just gets all the top level characteristics of these stats.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# get the top level characteristics of the data frame&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# characteristics that includes the word &amp;quot;Total&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# output is a list of the top level characteristics in the data frame&lt;/span&gt;
+getCharacters &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;df&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+ df&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grepl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;^Total&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; df&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Characteristics&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]),&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;][[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Characteristics&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; 
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+characters &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; getCharacters&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ontario.data&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;
+characters&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;## [1] &amp;quot;Total population by age groups&amp;quot;                            
+## [2] &amp;quot;Total population 15 years and over by legal marital status&amp;quot;
+## [3] &amp;quot;Total population 15 years and over by common-law status&amp;quot;   
+## [4] &amp;quot;Total population by knowledge of official languages&amp;quot;       
+## [5] &amp;quot;Total population by first official language spoken&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;These functions extract the particuar subset and the specified number of subcategories.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# helper function that extracts a particular characteristic of the data and all subcategories&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# top category has no spaces at start of the word, sub category has 2 spaces, sub sub has 4 &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# input is the data frame and characteristic we want&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# value is subset of the data frame&lt;/span&gt;
+getFullCategory &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;df&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; characteristic&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+ begin &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;grep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;paste0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\w*&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; characteristic&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; df&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Characteristics&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;
+ end &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; begin
+ bool &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;TRUE&lt;/span&gt;
+ &lt;span class=&quot;kr&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;bool&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt; 
+   bool &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;grepl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;^\\s&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; df&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Characteristics&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]][&lt;/span&gt;end&lt;span class=&quot;m&quot;&gt;+1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+   end &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; end &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+ &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ &lt;span class=&quot;kr&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;df&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;begin&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;end&lt;span class=&quot;m&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),])&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;## helper function that extracts a particular characteristic of the data and specified subcat&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# input is the data frame, characteristics, and number of subcategories&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# value is subset of the data frame&lt;/span&gt;
+getSubCategory &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;df&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; characteristic&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; depth&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+ depth &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;depth &lt;span class=&quot;m&quot;&gt;+1&lt;/span&gt;
+ temp &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; getFullCategory&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;df&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; characteristic&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+ temp&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;grepl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;paste0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;^\\s{&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; depth&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;}&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; temp&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Characteristics&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]])),]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here I construct a function that takes in a list of data frames along with a characteristic that
+we want and outputs one big data frame of that characteristic and subcharacteristics.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# Construct data frame of characteristic over all census divisions&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# input is list of data frames, characteristic&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# output is data frame&lt;/span&gt;
+getCharDataFrame &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;df.list&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; characteristic&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; depth &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+  temp &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;sapply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;df.list&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; getFullCategory&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                characteristic &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; characteristic&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                simplify &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;F&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  total &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;do.call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;rbind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; temp&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#put all data frames together&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;row.names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;total&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;NULL&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;#reorder the data frame according to Characteristics&lt;/span&gt;
+  characteristics &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; temp&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]][[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;
+  total&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Characteristics&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;factor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;total&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Characteristics&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]],&lt;/span&gt; 
+                                      levels &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; characteristics&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  total &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; total&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;total&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Characteristics&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]),]&lt;/span&gt;
+  
+  total&lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;“Total population by immigrant status and place of birth” looks like an interesting statistic. I construct a big data frame of all the census divisions of “Ontario” with that stat and write it to a csv file.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;immigrant.status &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; getCharDataFrame&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ontario.data&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Total population by immigrant status and place of birth&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; characters&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;23&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;immigrant.status&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;##                                             Characteristics     Division
+## 1   Total population by immigrant status and place of birth       Algoma
+## 39  Total population by immigrant status and place of birth        Brant
+## 77  Total population by immigrant status and place of birth        Bruce
+## 115 Total population by immigrant status and place of birth Chatham-Kent
+## 153 Total population by immigrant status and place of birth     Cochrane
+## 191 Total population by immigrant status and place of birth     Dufferin
+##      Total English French English.and.French
+## 1   116080   95730   8025                585
+## 39  123320  108755   1330                120
+## 77   64555   59580    545                 55
+## 115 107150   93405   2885                345
+## 153  81465   36660  38115               1130
+## 191  53920   49360    595                 90&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;write.csv&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;immigrant.status&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;ImmigrantStatusOntario.csv&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Next up, mapping this data frame onto a geographical map of Ontario. &lt;/p&gt;
+
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-2-of-3/&quot;&gt;Mapping Stats Canada Data with R part 2 of 3&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://localhost:4000&quot;&gt;This is a website&lt;/a&gt; on December 08, 2014.&lt;/p&gt;</content>
+</entry>
+
+
+  
+
+<entry>
   <title type="html"><![CDATA[Mapping Stats Canada Data with R part 1 of 3]]></title>
-  <link rel="alternate" type="text/html" href="http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-part-1-of-3/" />
-  <id>http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-part-1-of-3</id>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3/" />
+  <id>http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3</id>
   <published>2014-11-01T00:00:00-04:00</published>
   <updated>2014-11-01T00:00:00-04:00</updated>
   <author>
     <name>Ben Rifkind</name>
-    <uri>http://benrifkind.github.io</uri>
+    <uri>http://localhost:4000</uri>
     
   </author>
   <content type="html">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
@@ -92,7 +437,7 @@
 &lt;p&gt;Next up: cleaning and combing the csv files to get data I can map&lt;/p&gt;
 
 
-  &lt;p&gt;&lt;a href=&quot;http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-part-1-of-3/&quot;&gt;Mapping Stats Canada Data with R part 1 of 3&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://benrifkind.github.io&quot;&gt;This is a website&lt;/a&gt; on November 01, 2014.&lt;/p&gt;</content>
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3/&quot;&gt;Mapping Stats Canada Data with R part 1 of 3&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://localhost:4000&quot;&gt;This is a website&lt;/a&gt; on November 01, 2014.&lt;/p&gt;</content>
 </entry>
 
 
@@ -100,13 +445,13 @@
 
 <entry>
   <title type="html"><![CDATA[Analysis of Bicep Curl Quality]]></title>
-  <link rel="alternate" type="text/html" href="http://benrifkind.github.io/Analysis-of-Bicep-Curl-Quality/" />
-  <id>http://benrifkind.github.io/Analysis-of-Bicep-Curl-Quality</id>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/Analysis-of-Bicep-Curl-Quality/" />
+  <id>http://localhost:4000/Analysis-of-Bicep-Curl-Quality</id>
   <published>2014-10-30T00:00:00-04:00</published>
   <updated>2014-10-30T00:00:00-04:00</updated>
   <author>
     <name>Ben Rifkind</name>
-    <uri>http://benrifkind.github.io</uri>
+    <uri>http://localhost:4000</uri>
     
   </author>
   <content type="html">&lt;p&gt;For my first post I thought I’d write about some basic data classification. I’ve been going through the courses given by Carnegie Melon in the &lt;a href=&quot;https://www.coursera.org/specialization/jhudatascience/1&quot;&gt;Data Science Specialization Stream&lt;/a&gt; to learn R and some 
@@ -247,7 +592,7 @@ confusionMatrix&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;predict.table&lt;sp
 ## Balanced Accuracy      0.9947   0.9842   0.9780   0.9733   0.9881&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-  &lt;p&gt;&lt;a href=&quot;http://benrifkind.github.io/Analysis-of-Bicep-Curl-Quality/&quot;&gt;Analysis of Bicep Curl Quality&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://benrifkind.github.io&quot;&gt;This is a website&lt;/a&gt; on October 30, 2014.&lt;/p&gt;</content>
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/Analysis-of-Bicep-Curl-Quality/&quot;&gt;Analysis of Bicep Curl Quality&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://localhost:4000&quot;&gt;This is a website&lt;/a&gt; on October 30, 2014.&lt;/p&gt;</content>
 </entry>
 
 </feed>
