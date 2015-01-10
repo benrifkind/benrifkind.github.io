@@ -1,0 +1,394 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<title>Mapping Stats Canada Data with R part 2 of 3 &#8211; This is a website</title>
+<meta name="description" content="In this post I will reorganize the data that I have downloaded from the Stats Canada website so that I can start to work with it. Right now I have all census division files from Ontario in the folder “StatsCanadaData/Ontario” and in each file is a csv of all the statistics for that division. I want to extract some interesting  subset of each census division data frame (say country of origin of immigrants) and then merge all these divisions together so that I have one big data frame which I can then use to map and/or visualize the data.
+
+">
+<meta name="keywords" content="">
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Mapping Stats Canada Data with R part 2 of 3">
+<meta name="twitter:description" content="In this post I will reorganize the data that I have downloaded from the Stats Canada website so that I can start to work with it. Right now I have all census division files from Ontario in the folder “StatsCanadaData/Ontario” and in each file is a csv of all the statistics for that division. I want to extract some interesting  subset of each census division data frame (say country of origin of immigrants) and then merge all these divisions together so that I have one big data frame which I can then use to map and/or visualize the data.
+
+">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/images/default-thumb.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mapping Stats Canada Data with R part 2 of 3">
+<meta property="og:description" content="In this post I will reorganize the data that I have downloaded from the Stats Canada website so that I can start to work with it. Right now I have all census division files from Ontario in the folder “StatsCanadaData/Ontario” and in each file is a csv of all the statistics for that division. I want to extract some interesting  subset of each census division data frame (say country of origin of immigrants) and then merge all these divisions together so that I have one big data frame which I can then use to map and/or visualize the data.
+
+">
+<meta property="og:url" content="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-2-of-3/">
+<meta property="og:site_name" content="This is a website">
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-2-of-3/">
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="This is a website Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="http://localhost:4000/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="http://localhost:4000/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="http://localhost:4000/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://localhost:4000/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body class="post">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="http://localhost:4000">This is a website</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav">
+		    <ul>
+		        
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/about/" >About</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/posts/" >Posts</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/research/" >Research</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/downloads/BenRifkindCV.pdf" >CV</a></li>
+					  
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+
+
+
+	<img src="http://localhost:4000/images/BenR2.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+
+<h3>Ben Rifkind</h3>
+<p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
+
+
+
+
+
+
+
+<a href="http://github.com/benrifkind" class="author-social" target="_blank"><i class="fa fa-fw fa-github"></i> Github</a>
+
+
+
+
+
+
+
+
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-2-of-3/" rel="bookmark" title="Mapping Stats Canada Data with R part 2 of 3">Mapping Stats Canada Data with R part 2 of 3</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <p>In this post I will reorganize the data that I have downloaded from the Stats Canada website so that I can start to work with it. Right now I have all census division files from Ontario in the folder “StatsCanadaData/Ontario” and in each file is a csv of all the statistics for that division. I want to extract some interesting  subset of each census division data frame (say country of origin of immigrants) and then merge all these divisions together so that I have one big data frame which I can then use to map and/or visualize the data.</p>
+
+<p>First I need to clean up the csv files. They have a lot of footnotes and header information that I want to remove. The next few lines fix this. I read in the files from a particular province skipping the preamble and the footer, rename the columns, and cleanUp by removing the footnote numbering.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># Read files from a particular province</span>
+<span class="c1"># Output is a list of data frames</span>
+<span class="c1"># Skip first 4 rows and look at only 830 total rows of interest since end of file is notes</span>
+getProvinceFiles <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>province<span class="p">){</span>
+  province.dir <span class="o">=</span> <span class="kp">paste0</span><span class="p">(</span><span class="s">&quot;StatsCanadaData/&quot;</span><span class="p">,</span> province<span class="p">)</span> 
+  file.names <span class="o">=</span> <span class="kp">list.files</span><span class="p">(</span>province.dir<span class="p">,</span> full.name <span class="o">=</span> <span class="bp">T</span><span class="p">)</span>
+  <span class="kp">names</span><span class="p">(</span>file.names<span class="p">)</span> <span class="o">=</span> <span class="kp">gsub</span><span class="p">(</span><span class="s">&quot;.csv&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="kp">list.files</span><span class="p">(</span>province.dir<span class="p">,</span> full.name <span class="o">=</span> <span class="bp">F</span><span class="p">))</span>
+  temp <span class="o">=</span> <span class="kp">sapply</span><span class="p">(</span>file.names<span class="p">,</span> read.csv<span class="p">,</span> skip <span class="o">=</span> <span class="m">5</span><span class="p">,</span> nrows <span class="o">=</span> <span class="m">830</span><span class="p">,</span> 
+                col.names <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;Characteristics&quot;</span><span class="p">,</span> <span class="s">&quot;Total&quot;</span><span class="p">,</span> <span class="s">&quot;English&quot;</span><span class="p">,</span> <span class="s">&quot;French&quot;</span><span class="p">,</span> <span class="s">&quot;English and French&quot;</span><span class="p">),</span> 
+                header <span class="o">=</span> <span class="bp">F</span><span class="p">,</span>
+                simplify <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+  <span class="c1"># add name of census division to data frame</span>
+  <span class="kr">for</span> <span class="p">(</span>k <span class="kr">in</span> <span class="kp">seq</span><span class="p">(</span><span class="kp">length</span><span class="p">(</span><span class="kp">names</span><span class="p">(</span>temp<span class="p">)))){</span>
+    temp<span class="p">[[</span>k<span class="p">]][[</span><span class="s">&#39;Division&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="kp">names</span><span class="p">(</span>temp<span class="p">)[</span>k<span class="p">]</span>
+    <span class="p">}</span>
+  <span class="c1"># clean up Characteristics column</span>
+  temp <span class="o">=</span> <span class="kp">sapply</span><span class="p">(</span>temp<span class="p">,</span> cleanUp<span class="p">,</span> simplify <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span> 
+  temp
+  
+  <span class="p">}</span>
+
+<span class="c1"># gets rid of all the footnote numbering, $ signs I don&#39;t like, and spacing issues at </span>
+<span class="c1"># the end of the word. </span>
+ cleanUp <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>df<span class="p">){</span>
+   column <span class="o">=</span> <span class="s">&quot;Characteristics&quot;</span>
+   df<span class="p">[[</span>column<span class="p">]]</span> <span class="o">=</span> <span class="kp">gsub</span><span class="p">(</span><span class="s">&quot;\\[.+\\]&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> df<span class="p">[[</span>column<span class="p">]])</span>
+   df<span class="p">[[</span>column<span class="p">]]</span> <span class="o">=</span> <span class="kp">gsub</span><span class="p">(</span><span class="s">&quot;(\\$$)|(\\$\\s$)&quot;</span><span class="p">,</span> <span class="s">&quot;in CDN&quot;</span><span class="p">,</span> df<span class="p">[[</span>column<span class="p">]])</span>
+   df<span class="p">[[</span>column<span class="p">]]</span> <span class="o">=</span> <span class="kp">gsub</span><span class="p">(</span><span class="s">&quot;\\s+$&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> df<span class="p">[[</span>column<span class="p">]])</span>
+   df
+<span class="p">}</span></code></pre></div>
+
+<p>Now I have a ‘nice’ list of data frames for each census division</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r">ontario.data <span class="o">=</span> getProvinceFiles<span class="p">(</span><span class="s">&quot;Ontario&quot;</span><span class="p">)</span>
+<span class="kp">names</span><span class="p">(</span>ontario.data<span class="p">)</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">##  [1] &quot;Algoma&quot;                         &quot;Brant&quot;                         
+##  [3] &quot;Bruce&quot;                          &quot;Chatham-Kent&quot;                  
+##  [5] &quot;Cochrane&quot;                       &quot;Dufferin&quot;                      
+##  [7] &quot;Durham&quot;                         &quot;Elgin&quot;                         
+##  [9] &quot;Essex&quot;                          &quot;Frontenac&quot;                     
+## [11] &quot;Greater Sudbury&quot;                &quot;Grey&quot;                          
+## [13] &quot;Haldimand-Norfolk&quot;              &quot;Haliburton&quot;                    
+## [15] &quot;Halton&quot;                         &quot;Hamilton&quot;                      
+## [17] &quot;Hastings&quot;                       &quot;Huron&quot;                         
+## [19] &quot;Kawartha Lakes&quot;                 &quot;Kenora&quot;                        
+## [21] &quot;Lambton&quot;                        &quot;Lanark&quot;                        
+## [23] &quot;Leeds and Grenville&quot;            &quot;Lennox and Addington&quot;          
+## [25] &quot;Manitoulin&quot;                     &quot;Middlesex&quot;                     
+## [27] &quot;Muskoka&quot;                        &quot;Niagara&quot;                       
+## [29] &quot;Nipissing&quot;                      &quot;Northumberland&quot;                
+## [31] &quot;Ottawa&quot;                         &quot;Oxford&quot;                        
+## [33] &quot;Parry Sound&quot;                    &quot;Peel&quot;                          
+## [35] &quot;Perth&quot;                          &quot;Peterborough&quot;                  
+## [37] &quot;Prescott and Russell&quot;           &quot;Prince Edward&quot;                 
+## [39] &quot;Rainy River&quot;                    &quot;Renfrew&quot;                       
+## [41] &quot;Simcoe&quot;                         &quot;Stormont, Dundas and Glengarry&quot;
+## [43] &quot;Sudbury&quot;                        &quot;Thunder Bay&quot;                   
+## [45] &quot;Timiskaming&quot;                    &quot;Toronto&quot;                       
+## [47] &quot;Waterloo&quot;                       &quot;Wellington&quot;                    
+## [49] &quot;York&quot;</code></pre></div>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r"><span class="kp">head</span><span class="p">(</span>ontario.data<span class="p">[[</span><span class="s">&quot;Algoma&quot;</span><span class="p">]])</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">##                  Characteristics  Total English French English.and.French
+## 1 Total population by age groups 116075   95735   8025                585
+## 2                   0 to 4 years   4890    4560    145                 50
+## 3                   5 to 9 years   5640    5220    225                  0
+## 4                 10 to 14 years   7285    6850    235                 10
+## 5                 15 to 19 years   8005    7435    340                 45
+## 6                 20 to 24 years   6695    6195    265                 75
+##   Division
+## 1   Algoma
+## 2   Algoma
+## 3   Algoma
+## 4   Algoma
+## 5   Algoma
+## 6   Algoma</code></pre></div>
+
+<p>A word as to how the data frame is organized. Basically there are a bunch of categories in the census for the statistic (income, education, labour) and then there are subcategories and sub-sub-categories. The way that this is organized in the data frame is via the number of spaces before the entry. 0 spaces for head of the category, 2 spaces for the subcategory, 4 spaces for the sub-subcategory, etc. I wrote functions in order to extract the top categories and also the statistics for a given category and its subcategories.</p>
+
+<p>The first function just gets all the top level characteristics of these stats.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># get the top level characteristics of the data frame</span>
+<span class="c1"># characteristics that includes the word &quot;Total&quot;</span>
+<span class="c1"># output is a list of the top level characteristics in the data frame</span>
+getCharacters <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>df<span class="p">){</span>
+ df<span class="p">[</span><span class="kp">grepl</span><span class="p">(</span><span class="s">&quot;^Total&quot;</span><span class="p">,</span> df<span class="p">[[</span><span class="s">&quot;Characteristics&quot;</span><span class="p">]]),</span> <span class="p">][[</span><span class="s">&quot;Characteristics&quot;</span><span class="p">]]</span> 
+<span class="p">}</span>
+
+characters <span class="o">=</span> getCharacters<span class="p">(</span>ontario.data<span class="p">[[</span><span class="m">1</span><span class="p">]])</span>
+characters<span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">]</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">## [1] &quot;Total population by age groups&quot;                            
+## [2] &quot;Total population 15 years and over by legal marital status&quot;
+## [3] &quot;Total population 15 years and over by common-law status&quot;   
+## [4] &quot;Total population by knowledge of official languages&quot;       
+## [5] &quot;Total population by first official language spoken&quot;</code></pre></div>
+
+<p>These functions extract the particuar subset and the specified number of subcategories.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># helper function that extracts a particular characteristic of the data and all subcategories</span>
+<span class="c1"># top category has no spaces at start of the word, sub category has 2 spaces, sub sub has 4 </span>
+<span class="c1"># input is the data frame and characteristic we want</span>
+<span class="c1"># value is subset of the data frame</span>
+getFullCategory <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>df<span class="p">,</span> characteristic<span class="p">){</span>
+ begin <span class="o">=</span> <span class="kp">grep</span><span class="p">(</span><span class="kp">paste0</span><span class="p">(</span><span class="s">&quot;\\w*&quot;</span><span class="p">,</span> characteristic<span class="p">),</span> df<span class="p">[[</span><span class="s">&quot;Characteristics&quot;</span><span class="p">]])</span>
+ end <span class="o">=</span> begin
+ bool <span class="o">=</span> <span class="kc">TRUE</span>
+ <span class="kr">while</span> <span class="p">(</span>bool<span class="p">){</span> 
+   bool <span class="o">=</span> <span class="kp">grepl</span><span class="p">(</span><span class="s">&quot;^\\s&quot;</span><span class="p">,</span> df<span class="p">[[</span><span class="s">&quot;Characteristics&quot;</span><span class="p">]][</span>end<span class="m">+1</span><span class="p">])</span>
+   end <span class="o">=</span> end <span class="o">+</span> <span class="m">1</span>
+ <span class="p">}</span>
+ <span class="kr">return</span><span class="p">(</span>df<span class="p">[</span>begin<span class="o">:</span><span class="p">(</span>end<span class="m">-1</span><span class="p">),])</span>
+<span class="p">}</span>
+
+<span class="c1">## helper function that extracts a particular characteristic of the data and specified subcat</span>
+<span class="c1"># input is the data frame, characteristics, and number of subcategories</span>
+<span class="c1"># value is subset of the data frame</span>
+getSubCategory <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>df<span class="p">,</span> characteristic<span class="p">,</span> depth<span class="p">){</span>
+ depth <span class="o">=</span> <span class="m">2</span><span class="o">*</span>depth <span class="m">+1</span>
+ temp <span class="o">=</span> getFullCategory<span class="p">(</span>df<span class="p">,</span> characteristic<span class="p">)</span>
+ temp<span class="p">[</span><span class="o">!</span><span class="p">(</span><span class="kp">grepl</span><span class="p">(</span><span class="kp">paste0</span><span class="p">(</span><span class="s">&quot;^\\s{&quot;</span><span class="p">,</span> depth<span class="p">,</span><span class="s">&quot;}&quot;</span><span class="p">),</span> temp<span class="p">[[</span><span class="s">&quot;Characteristics&quot;</span><span class="p">]])),]</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Here I construct a function that takes in a list of data frames along with a characteristic that
+we want and outputs one big data frame of that characteristic and subcharacteristics.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># Construct data frame of characteristic over all census divisions</span>
+<span class="c1"># input is list of data frames, characteristic</span>
+<span class="c1"># output is data frame</span>
+getCharDataFrame <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>df.list<span class="p">,</span> characteristic<span class="p">,</span> depth <span class="o">=</span> <span class="m">2</span><span class="p">){</span>
+  temp <span class="o">=</span> <span class="kp">sapply</span><span class="p">(</span>df.list<span class="p">,</span> getFullCategory<span class="p">,</span> 
+                characteristic <span class="o">=</span> characteristic<span class="p">,</span>
+                simplify <span class="o">=</span> <span class="bp">F</span><span class="p">)</span>
+  total <span class="o">=</span> <span class="kp">do.call</span><span class="p">(</span><span class="kp">rbind</span><span class="p">,</span> temp<span class="p">)</span> <span class="c1">#put all data frames together</span>
+  <span class="kp">row.names</span><span class="p">(</span>total<span class="p">)</span> <span class="o">=</span> <span class="kc">NULL</span>
+  <span class="c1">#reorder the data frame according to Characteristics</span>
+  characteristics <span class="o">=</span> temp<span class="p">[[</span><span class="m">1</span><span class="p">]][[</span><span class="m">1</span><span class="p">]]</span>
+  total<span class="p">[[</span><span class="s">&#39;Characteristics&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="kp">factor</span><span class="p">(</span>total<span class="p">[[</span><span class="s">&#39;Characteristics&#39;</span><span class="p">]],</span> 
+                                      levels <span class="o">=</span> characteristics<span class="p">)</span>
+  total <span class="o">=</span> total<span class="p">[</span><span class="kp">order</span><span class="p">(</span>total<span class="p">[[</span><span class="s">&#39;Characteristics&#39;</span><span class="p">]]),]</span>
+  
+  total<span class="p">[,</span> <span class="kt">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">)]</span>
+<span class="p">}</span></code></pre></div>
+
+<p>“Total population by immigrant status and place of birth” looks like an interesting statistic. I construct a big data frame of all the census divisions of “Ontario” with that stat and write it to a csv file.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r">immigrant.status <span class="o">=</span> getCharDataFrame<span class="p">(</span>ontario.data<span class="p">,</span> <span class="s">&quot;Total population by immigrant status and place of birth&quot;</span><span class="p">,</span> characters<span class="p">[</span><span class="m">23</span><span class="p">])</span>
+<span class="kp">head</span><span class="p">(</span>immigrant.status<span class="p">)</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">##                                             Characteristics     Division
+## 1   Total population by immigrant status and place of birth       Algoma
+## 39  Total population by immigrant status and place of birth        Brant
+## 77  Total population by immigrant status and place of birth        Bruce
+## 115 Total population by immigrant status and place of birth Chatham-Kent
+## 153 Total population by immigrant status and place of birth     Cochrane
+## 191 Total population by immigrant status and place of birth     Dufferin
+##      Total English French English.and.French
+## 1   116080   95730   8025                585
+## 39  123320  108755   1330                120
+## 77   64555   59580    545                 55
+## 115 107150   93405   2885                345
+## 153  81465   36660  38115               1130
+## 191  53920   49360    595                 90</code></pre></div>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r">write.csv<span class="p">(</span>immigrant.status<span class="p">,</span> <span class="s">&quot;ImmigrantStatusOntario.csv&quot;</span><span class="p">)</span></code></pre></div>
+
+<p>Next up, mapping this data frame onto a geographical map of Ontario. </p>
+
+      <hr />
+      <footer role="contentinfo">
+        <div class="article-author-bottom">
+          
+
+
+
+	<img src="http://localhost:4000/images/BenR2.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+
+<h3>Ben Rifkind</h3>
+<p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
+
+
+
+
+
+
+
+<a href="http://github.com/benrifkind" class="author-social" target="_blank"><i class="fa fa-fw fa-github"></i> Github</a>
+
+
+
+
+
+
+
+
+        </div>
+        <p class="byline"><strong>Mapping Stats Canada Data with R part 2 of 3</strong> was published on <time datetime="2014-12-08T00:00:00-05:00">December 08, 2014</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="http://localhost:4000/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+      <li><a href="http://localhost:4000/Water-Usage-in-Toronto/" title="Water Usage in Toronto">Water Usage in Toronto</a></li>
+    
+      <li><a href="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3/" title="Mapping Stats Canada Data with R part 1 of 3">Mapping Stats Canada Data with R part 1 of 3</a></li>
+    
+      <li><a href="http://localhost:4000/Analysis-of-Bicep-Curl-Quality/" title="Analysis of Bicep Curl Quality">Analysis of Bicep Curl Quality</a></li>
+    
+    </ul>
+    <hr />
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>&copy; 2015 Ben Rifkind. Powered by <a href="http://jekyllrb.com">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://localhost:4000/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://localhost:4000/assets/js/scripts.min.js"></script>
+
+	        
+
+</body>
+</html>

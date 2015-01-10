@@ -1,0 +1,360 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<title>Water Usage in Toronto &#8211; This is a website</title>
+<meta name="description" content="This is just a quick writeup on how to use GIS files to visualize some data from Open Data. The idea was to visualize the water consumption of the different wards of Toronto. I have a bit of an easy point to make. My guess is that that the richer you are the more water you consume. The water consumption of each ward is available here.
+The data is water consumption for each ward from 2000 to 2013. 
+
+">
+<meta name="keywords" content="R, open data Toronto, ggmap">
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Water Usage in Toronto">
+<meta name="twitter:description" content="This is just a quick writeup on how to use GIS files to visualize some data from Open Data. The idea was to visualize the water consumption of the different wards of Toronto. I have a bit of an easy point to make. My guess is that that the richer you are the more water you consume. The water consumption of each ward is available here.
+The data is water consumption for each ward from 2000 to 2013. 
+
+">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/images/default-thumb.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Water Usage in Toronto">
+<meta property="og:description" content="This is just a quick writeup on how to use GIS files to visualize some data from Open Data. The idea was to visualize the water consumption of the different wards of Toronto. I have a bit of an easy point to make. My guess is that that the richer you are the more water you consume. The water consumption of each ward is available here.
+The data is water consumption for each ward from 2000 to 2013. 
+
+">
+<meta property="og:url" content="http://localhost:4000/Water-Usage-in-Toronto/">
+<meta property="og:site_name" content="This is a website">
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/Water-Usage-in-Toronto/">
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="This is a website Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="http://localhost:4000/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="http://localhost:4000/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="http://localhost:4000/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://localhost:4000/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body class="post">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="http://localhost:4000">This is a website</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav">
+		    <ul>
+		        
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/about/" >About</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/posts/" >Posts</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/research/" >Research</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://localhost:4000/downloads/BenRifkindCV.pdf" >CV</a></li>
+					  
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+
+
+
+	<img src="http://localhost:4000/images/BenR2.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+
+<h3>Ben Rifkind</h3>
+<p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
+
+
+
+
+
+
+
+<a href="http://github.com/benrifkind" class="author-social" target="_blank"><i class="fa fa-fw fa-github"></i> Github</a>
+
+
+
+
+
+
+
+
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="http://localhost:4000/Water-Usage-in-Toronto/" rel="bookmark" title="Water Usage in Toronto">Water Usage in Toronto</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <p>This is just a quick writeup on how to use GIS files to visualize some data from <a href="http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=9e56e03bb8d1e310VgnVCM10000071d60f89RCRD">Open Data</a>. The idea was to visualize the water consumption of the different wards of Toronto. I have a bit of an easy point to make. My guess is that that the richer you are the more water you consume. The water consumption of each ward is available <a href="http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=289bd103cd8b1310VgnVCM1000003dd60f89RCRD&amp;vgnextchannel=8517e03bb8d1e310VgnVCM10000071d60f89RCRD">here</a>.
+The data is water consumption for each ward from 2000 to 2013. </p>
+
+<p>First I read in the data for 2000 and 2013.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r">water.2000 <span class="o">=</span> read.csv<span class="p">(</span><span class="s">&#39;CoT_Water_Consumption/Water_Consumption_2000.csv&#39;</span><span class="p">,</span> header <span class="o">=</span> <span class="bp">T</span><span class="p">)</span>
+water.2013 <span class="o">=</span> read.csv<span class="p">(</span><span class="s">&#39;CoT_Water_Consumption/Water_Consumption_2013.csv&#39;</span><span class="p">,</span> header <span class="o">=</span> <span class="bp">T</span><span class="p">)</span></code></pre></div>
+
+<p>There is data for commercial accounts and residential accounts. The ammounts are all in metres cubed. Here’s a quick look at the data for the first 3 wards.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">city.ward</th>
+      <th style="text-align: right">year</th>
+      <th style="text-align: right">residential.accounts</th>
+      <th style="text-align: right">annual.residential.usage</th>
+      <th style="text-align: right">average.residential.usage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: right">8001</td>
+      <td style="text-align: right">3205060</td>
+      <td style="text-align: right">400.58</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: right">9909</td>
+      <td style="text-align: right">3567371</td>
+      <td style="text-align: right">360.01</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: right">10389</td>
+      <td style="text-align: right">2821739</td>
+      <td style="text-align: right">271.61</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">city.ward</th>
+      <th style="text-align: right">year</th>
+      <th style="text-align: right">commercial.accounts</th>
+      <th style="text-align: right">annual.commercial.usage</th>
+      <th style="text-align: right">average.commercial.usage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: right">148</td>
+      <td style="text-align: right">4730288</td>
+      <td style="text-align: right">31961.41</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: right">245</td>
+      <td style="text-align: right">12607962</td>
+      <td style="text-align: right">51461.07</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">2000</td>
+      <td style="text-align: right">97</td>
+      <td style="text-align: right">3094197</td>
+      <td style="text-align: right">31898.94</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Here is a quick plot of average water consumption over the years. I faceted the data according to whether it was residential or commercial use.
+<img src="/../figs/2015-01-07-Water-Usage-in-Toronto/unnamed-chunk-5-1.png" alt="center" /> </p>
+
+<p>So the ammount of average water consumption looks like it has been going down over the years. This is a little unexpected and heartening for me. I was also interested in seeing how the water consumption varies throughout the different wards of Toronto. Who is using the most water? I thought a good visualization of this would be to construct a heat map of the water consumption. To do this I used the GIS information for ward boundaries available at <a href="http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=b1533f0aacaaa210VgnVCM1000006cd60f89RCRD&amp;vgnextchannel=1a66e03bb8d1e310VgnVCM10000071d60f89RCRD">open data Toronto</a>. </p>
+
+<p>First read in the shape file and rotate it so that the topmost boundary is more or less flat. </p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>maptools<span class="p">)</span>
+ward.map <span class="o">=</span> readShapeSpatial<span class="p">(</span><span class="s">&#39;gcc/icitw_wgs84.shp&#39;</span><span class="p">,</span>
+                               proj4string <span class="o">=</span> CRS<span class="p">(</span><span class="s">&quot;+proj=longlat +datum=WGS84&quot;</span><span class="p">)</span> <span class="p">)</span>
+ward.map <span class="o">=</span> elide<span class="p">(</span>ward.map<span class="p">,</span> rotate<span class="o">=</span><span class="m">13</span><span class="p">)</span></code></pre></div>
+
+<p>Next I use fortify to turn the spatial object into a data frame. Then I use ggplot to map it and the polygons that are the ward boundaries.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>rgeos<span class="p">)</span>
+ward.map.df <span class="o">=</span> fortify<span class="p">(</span>ward.map<span class="p">,</span> region <span class="o">=</span> <span class="s">&quot;SCODE_NAME&quot;</span><span class="p">)</span>
+ward.map.df<span class="o">$</span>id <span class="o">=</span> <span class="kp">as.integer</span><span class="p">(</span>ward.map.df<span class="o">$</span>id<span class="p">)</span> <span class="c1">#fixes ward labels</span>
+ggplot<span class="p">(</span>data<span class="o">=</span>ward.map.df<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span>long<span class="p">,</span> y<span class="o">=</span>lat<span class="p">,</span> group<span class="o">=</span>group<span class="p">))</span> <span class="o">+</span> 
+  geom_polygon<span class="p">(</span>fill <span class="o">=</span> <span class="kc">NA</span><span class="p">,</span> colour <span class="o">=</span> <span class="s">&#39;black&#39;</span><span class="p">)</span> <span class="o">+</span> 
+  map.theme <span class="c1">#theme for map plots not defined here</span></code></pre></div>
+
+<p><img src="/../figs/2015-01-07-Water-Usage-in-Toronto/unnamed-chunk-8-1.png" alt="center" /> </p>
+
+<p>This looks very basic. I’ll add the ward numbers to each ward and make that heat map. The first step is to merge the water data and map data together. I also find the centroids of each polygon and label them according to the ward. I will use this labeling to identify the wards in the final plot.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># merge the water data and map data together</span>
+total.df <span class="o">=</span> <span class="kp">merge</span><span class="p">(</span>ward.map.df<span class="p">,</span> water<span class="p">,</span> by.x <span class="o">=</span> <span class="s">&#39;id&#39;</span><span class="p">,</span> by.y <span class="o">=</span> <span class="s">&#39;city.ward&#39;</span><span class="p">)</span>
+total.df <span class="o">=</span> total.df<span class="p">[</span><span class="kp">order</span><span class="p">(</span>total.df<span class="o">$</span><span class="kp">order</span><span class="p">),</span> <span class="p">]</span>
+
+<span class="c1">#find centroids of polygons for ward labelling</span>
+centroids  <span class="o">=</span> <span class="kp">as.data.frame</span><span class="p">(</span>gCentroid<span class="p">(</span>ward.map<span class="p">,</span> byid <span class="o">=</span> <span class="bp">T</span><span class="p">))</span>
+<span class="c1"># keep track of which polygon the centroid is in</span>
+centroids<span class="p">[[</span><span class="s">&#39;id&#39;</span><span class="p">]]</span> <span class="o">=</span> ward.map<span class="o">@</span>data<span class="o">$</span>SCODE_NAME</code></pre></div>
+
+<p>Now I can make that heat map. Here are the residential maps. (I didn’t include the code for the 2013 map since it would be redundant.)</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r">total.df.2000 <span class="o">=</span> total.df<span class="p">[</span>total.df<span class="o">$</span>year<span class="o">==</span><span class="m">2000</span><span class="p">,]</span>
+pAverageResidential <span class="o">&lt;-</span> ggplot<span class="p">(</span>data <span class="o">=</span> total.df.2000<span class="p">,</span> aes<span class="p">(</span>x <span class="o">=</span> long<span class="p">,</span> y <span class="o">=</span> lat<span class="p">,</span> group <span class="o">=</span> group<span class="p">))</span> <span class="o">+</span> 
+  geom_polygon<span class="p">(</span>aes<span class="p">(</span>fill <span class="o">=</span> average.residential.usage<span class="p">),</span> color <span class="o">=</span> <span class="s">&#39;red&#39;</span><span class="p">,</span> alpha <span class="o">=</span> <span class="m">0.6</span><span class="p">)</span> <span class="o">+</span>
+  scale_fill_gradient<span class="p">(</span>name <span class="o">=</span> <span class="s">&#39;Average residential\nusage in metres cubed&#39;</span><span class="p">,</span>
+                      low <span class="o">=</span> <span class="s">&quot;cyan3&quot;</span><span class="p">,</span> high <span class="o">=</span> <span class="s">&quot;blue3&quot;</span><span class="p">)</span> <span class="o">+</span>
+  labs<span class="p">(</span>title <span class="o">=</span> <span class="s">&quot;Average Toronto Residential Water Usage in 2000&quot;</span><span class="p">)</span>
+
+pAverageResidential <span class="o">+</span> 
+  map.theme <span class="o">+</span> <span class="c1">#theme for a map plot I defined earlier</span>
+  geom_text<span class="p">(</span>aes<span class="p">(</span>x<span class="o">=</span>x<span class="p">,</span>y<span class="o">=</span>y<span class="p">,</span> group<span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> label<span class="o">=</span>id<span class="p">),</span> data <span class="o">=</span> centroids<span class="p">,</span> size<span class="o">=</span><span class="m">2</span><span class="p">)</span> <span class="c1">#ward labels</span></code></pre></div>
+
+<p><img src="/../figs/2015-01-07-Water-Usage-in-Toronto/heatMaps-1.png" alt="center" /> </p>
+
+<p><img src="/../figs/2015-01-07-Water-Usage-in-Toronto/unnamed-chunk-10-1.png" alt="Code not included" /> </p>
+
+<p>So water consumption throughout Toronto has gone down but still the downtown core definitely seems to be using the most water. And in particular, ward 20, the Trinity-Spadina area of Toronto is using quite a bit more water per person than the rest of Toronto. I really don’t have any good idea why this might be. I initially thought the wealthier areas of Toronto would consume more water. The simplest factor I had in mind was swimming pools. But it looks like this does not matter so much.</p>
+
+<p>Here are the maps for commercial water consumption.
+<img src="/../figs/2015-01-07-Water-Usage-in-Toronto/unnamed-chunk-11-1.png" alt="center" /> <img src="/../figs/2015-01-07-Water-Usage-in-Toronto/unnamed-chunk-11-2.png" alt="center" /> 
+It looks like ward 2, Etobicoke, is the heavy user of water commercially. Any ideas why this would be the case?</p>
+
+      <hr />
+      <footer role="contentinfo">
+        <div class="article-author-bottom">
+          
+
+
+
+	<img src="http://localhost:4000/images/BenR2.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+
+<h3>Ben Rifkind</h3>
+<p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
+
+
+
+
+
+
+
+<a href="http://github.com/benrifkind" class="author-social" target="_blank"><i class="fa fa-fw fa-github"></i> Github</a>
+
+
+
+
+
+
+
+
+        </div>
+        <p class="byline"><strong>Water Usage in Toronto</strong> was published on <time datetime="2015-01-07T00:00:00-05:00">January 07, 2015</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="http://localhost:4000/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+      <li><a href="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-2-of-3/" title="Mapping Stats Canada Data with R part 2 of 3">Mapping Stats Canada Data with R part 2 of 3</a></li>
+    
+      <li><a href="http://localhost:4000/Mapping-Stats-Canada-Data-with-R-part-1-of-3/" title="Mapping Stats Canada Data with R part 1 of 3">Mapping Stats Canada Data with R part 1 of 3</a></li>
+    
+      <li><a href="http://localhost:4000/Analysis-of-Bicep-Curl-Quality/" title="Analysis of Bicep Curl Quality">Analysis of Bicep Curl Quality</a></li>
+    
+    </ul>
+    <hr />
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>&copy; 2015 Ben Rifkind. Powered by <a href="http://jekyllrb.com">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://localhost:4000/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://localhost:4000/assets/js/scripts.min.js"></script>
+
+	        
+
+</body>
+</html>
