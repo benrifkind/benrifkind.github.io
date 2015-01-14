@@ -1,0 +1,351 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<title>Mapping Stats Canada Data with R Part 3 of 3 &#8211; This is a website</title>
+<meta name="description" content="I now have some census data for the Ontario census divisions and I’d like to visualize it on a map of Ontario. First I need a GIS file of the census divisions which I can get from the stats Canada website. I’ll read in the Ontario census division data and the shape file data
+
+">
+<meta name="keywords" content="R, mapping, Ontario census data">
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Mapping Stats Canada Data with R Part 3 of 3">
+<meta name="twitter:description" content="I now have some census data for the Ontario census divisions and I’d like to visualize it on a map of Ontario. First I need a GIS file of the census divisions which I can get from the stats Canada website. I’ll read in the Ontario census division data and the shape file data
+
+">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://benrifkind.github.io/images/default-thumb.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mapping Stats Canada Data with R Part 3 of 3">
+<meta property="og:description" content="I now have some census data for the Ontario census divisions and I’d like to visualize it on a map of Ontario. First I need a GIS file of the census divisions which I can get from the stats Canada website. I’ll read in the Ontario census division data and the shape file data
+
+">
+<meta property="og:url" content="http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-Part-3-of-3/">
+<meta property="og:site_name" content="This is a website">
+
+
+
+
+
+<link rel="canonical" href="http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-Part-3-of-3/">
+<link href="http://benrifkind.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="This is a website Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://benrifkind.github.io/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="http://benrifkind.github.io/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="http://benrifkind.github.io/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="http://benrifkind.github.io/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://benrifkind.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://benrifkind.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://benrifkind.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://benrifkind.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://benrifkind.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://benrifkind.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body class="post">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="http://benrifkind.github.io">This is a website</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav">
+		    <ul>
+		        
+					    
+					        
+					    
+					    <li><a href="http://benrifkind.github.io/about/" >About</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://benrifkind.github.io/posts/" >Posts</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://benrifkind.github.io/research/" >Research</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://benrifkind.github.io/downloads/BenRifkindCV.pdf" >CV</a></li>
+					  
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+
+
+
+	<img src="http://benrifkind.github.io/images/BenR2.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+
+<h3>Ben Rifkind</h3>
+<p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
+
+
+
+
+
+
+
+<a href="http://github.com/benrifkind" class="author-social" target="_blank"><i class="fa fa-fw fa-github"></i> Github</a>
+
+
+
+
+
+
+
+
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-Part-3-of-3/" rel="bookmark" title="Mapping Stats Canada Data with R Part 3 of 3">Mapping Stats Canada Data with R Part 3 of 3</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <p>I now have some census data for the Ontario census divisions and I’d like to visualize it on a map of Ontario. First I need a GIS file of the census divisions which I can get from the <a href="http://www12.statcan.gc.ca/census-recensement/2011/geo/bound-limit/bound-limit-2006-eng.cfm">stats Canada website</a>. I’ll read in the Ontario census division data and the shape file data</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>rgeos<span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>maptools<span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>ggmap<span class="p">)</span>
+ontario.data <span class="o">=</span> read.csv<span class="p">(</span><span class="s">&quot;Total population by immigrant status and place of birth.csv&quot;</span><span class="p">,</span> header<span class="o">=</span><span class="bp">T</span><span class="p">)</span>
+sp.Canada <span class="o">&lt;-</span> readShapeSpatial<span class="p">(</span><span class="s">&#39;ShapeOrganizing/Boundary Files//gcd_000a07a_e.shp&#39;</span><span class="p">,</span> 
+                       proj4string <span class="o">=</span> CRS<span class="p">(</span><span class="s">&quot;+proj=longlat +datum=WGS84&quot;</span><span class="p">)</span> <span class="p">)</span></code></pre></div>
+
+<p>sp.Canada is a shape file which is an S4 object in R. This means that it has different ‘slots’ which contain different attributes of the object. </p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r">slotNames<span class="p">(</span>sp.Canada<span class="p">)</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">## [1] &quot;data&quot;        &quot;polygons&quot;    &quot;plotOrder&quot;   &quot;bbox&quot;        &quot;proj4string&quot;</code></pre></div>
+
+<p>I only care about the data slot which I can access using the ‘@’ symbol. This is a data frame which contains the identifying information of the census divisions.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r"><span class="kn">library</span><span class="p">(</span>knitr<span class="p">)</span>
+<span class="kp">names</span><span class="p">(</span>sp.Canada<span class="o">@</span>data<span class="p">)</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">## [1] &quot;CDUID&quot;  &quot;CDNAME&quot; &quot;CDTYPE&quot; &quot;PRUID&quot;  &quot;PRNAME&quot;</code></pre></div>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r">kable<span class="p">(</span><span class="kp">head</span><span class="p">(</span>sp.Canada<span class="o">@</span>data<span class="p">,</span> <span class="m">5</span><span class="p">))</span></code></pre></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"> </th>
+      <th style="text-align: left">CDUID</th>
+      <th style="text-align: left">CDNAME</th>
+      <th style="text-align: left">CDTYPE</th>
+      <th style="text-align: left">PRUID</th>
+      <th style="text-align: left">PRNAME</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">0</td>
+      <td style="text-align: left">1001</td>
+      <td style="text-align: left">Division No.  1</td>
+      <td style="text-align: left">CDR</td>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">Newfoundland and Labrador / Terre-Neuve-et-Labrador</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">1002</td>
+      <td style="text-align: left">Division No.  2</td>
+      <td style="text-align: left">CDR</td>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">Newfoundland and Labrador / Terre-Neuve-et-Labrador</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">1003</td>
+      <td style="text-align: left">Division No.  3</td>
+      <td style="text-align: left">CDR</td>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">Newfoundland and Labrador / Terre-Neuve-et-Labrador</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">1004</td>
+      <td style="text-align: left">Division No.  4</td>
+      <td style="text-align: left">CDR</td>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">Newfoundland and Labrador / Terre-Neuve-et-Labrador</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">4</td>
+      <td style="text-align: left">1005</td>
+      <td style="text-align: left">Division No.  5</td>
+      <td style="text-align: left">CDR</td>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">Newfoundland and Labrador / Terre-Neuve-et-Labrador</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>We first select out only the Ontario shape file.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r">sp.Ontario <span class="o">=</span> sp.Canada<span class="p">[</span>sp.Canada<span class="o">@</span>data<span class="o">$</span>PRNAME <span class="o">==</span> <span class="s">&quot;Ontario&quot;</span><span class="p">,]</span></code></pre></div>
+
+<p>There is a slight issue in that some of the census division names are different in the shape file than in the data frame that I have made. I have to fix this but I’ll leave out the code.</p>
+
+<p>I used the fortify function to turn the shape file into a data frame so that ggplot can map it.Now I can plot a density map of whichever of the following immigrant statistics I would like.</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">##  [1] &quot;Total population by immigrant status and place of birth&quot;
+##  [2] &quot;Non-immigrants&quot;                                         
+##  [3] &quot;Born in province of residence&quot;                          
+##  [4] &quot;Born outside province of residence&quot;                     
+##  [5] &quot;Immigrants&quot;                                             
+##  [6] &quot;United States of America&quot;                               
+##  [7] &quot;Central America&quot;                                        
+##  [8] &quot;Caribbean and Bermuda&quot;                                  
+##  [9] &quot;South America&quot;                                          
+## [10] &quot;Europe&quot;                                                 
+## [11] &quot;Africa&quot;                                                 
+## [12] &quot;Asia and the Middle East&quot;                               
+## [13] &quot;Oceania and other&quot;                                      
+## [14] &quot;Non-permanent residents&quot;</code></pre></div>
+
+<p>I want to know what the distribution of non-immigrants looks like. First I find the proportion of non-immigrants in each census division. Then merge it with the ontario census map according to the division name. The ordering of the points in the map get mixed up when I do this so I have to reorder them.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r">totals <span class="o">=</span> ontario.data<span class="p">[</span>ontario.data<span class="o">$</span>Characteristics <span class="o">==</span>
+                      <span class="s">&quot;Total population by immigrant status and place of birth&quot;</span><span class="p">,]</span>
+non.immigrants <span class="o">=</span> ontario.data<span class="p">[</span>ontario.data<span class="o">$</span>Characteristics <span class="o">==</span>
+                      <span class="s">&quot;Non-immigrants&quot;</span><span class="p">,]</span>
+non.immigrants<span class="p">[[</span><span class="s">&quot;proportion&quot;</span><span class="p">]]</span> <span class="o">=</span> non.immigrants<span class="o">$</span>Total<span class="o">/</span>totals<span class="o">$</span>Total
+
+<span class="c1">#merge the data with the ontario map data frame</span>
+non.immigrants.map <span class="o">=</span> <span class="kp">merge</span><span class="p">(</span>sp.ontario.df<span class="p">,</span>
+                non.immigrants<span class="p">,</span> 
+                by.x <span class="o">=</span> <span class="s">&quot;id&quot;</span><span class="p">,</span> by.y <span class="o">=</span> <span class="s">&quot;Division&quot;</span><span class="p">)</span>
+non.immigrants.map <span class="o">=</span> non.immigrants.map<span class="p">[</span><span class="kp">order</span><span class="p">(</span>non.immigrants.map<span class="o">$</span><span class="kp">order</span><span class="p">),]</span></code></pre></div>
+
+<p>Now I just use ggplot to map the data.</p>
+
+<div class="highlight"><pre><code class="language-r" data-lang="r">p <span class="o">=</span> ggplot<span class="p">(</span>data <span class="o">=</span> non.immigrants.map<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span>long<span class="p">,</span> y<span class="o">=</span>lat<span class="p">,</span> group <span class="o">=</span> group<span class="p">))</span> <span class="o">+</span> 
+  geom_polygon<span class="p">(</span>aes<span class="p">(</span>fill<span class="o">=</span>proportion<span class="p">),</span> color <span class="o">=</span> <span class="s">&#39;black&#39;</span><span class="p">)</span> <span class="o">+</span>
+  scale_fill_gradient<span class="p">(</span>name <span class="o">=</span> <span class="s">&#39;Proportion of\nnon-immigrants&#39;</span><span class="p">,</span>
+                      low <span class="o">=</span> <span class="s">&quot;gold2&quot;</span><span class="p">,</span> high <span class="o">=</span> <span class="s">&quot;firebrick2&quot;</span><span class="p">)</span>
+p <span class="o">+</span> theme <span class="o">+</span> labs<span class="p">(</span>title <span class="o">=</span> <span class="s">&quot;Proportion of Non-immigrants in Ontario&quot;</span><span class="p">)</span></code></pre></div>
+
+<p><img src="/../figs/Mapping-Stats-Canada-Data-Part-3-of3/unnamed-chunk-9-1.png" alt="center" /> </p>
+
+<p>So most of the areas outside of Toronto have significantly less immigrants proportionally. We can see the flip side of this if we plot the proportion of immigrants in Ontario. 
+<img src="/../figs/Mapping-Stats-Canada-Data-Part-3-of3/unnamed-chunk-10-1.png" alt="center" /> </p>
+
+<p>Of course this map is just the counterpart to the previous map.</p>
+
+      <hr />
+      <footer role="contentinfo">
+        <div class="article-author-bottom">
+          
+
+
+
+	<img src="http://benrifkind.github.io/images/BenR2.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+
+<h3>Ben Rifkind</h3>
+<p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
+
+
+
+
+
+
+
+<a href="http://github.com/benrifkind" class="author-social" target="_blank"><i class="fa fa-fw fa-github"></i> Github</a>
+
+
+
+
+
+
+
+
+        </div>
+        <p class="byline"><strong>Mapping Stats Canada Data with R Part 3 of 3</strong> was published on <time datetime="2014-12-20T00:00:00-05:00">December 20, 2014</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="http://benrifkind.github.io/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+      <li><a href="http://benrifkind.github.io/Water-Usage-in-Toronto/" title="Water Usage in Toronto">Water Usage in Toronto</a></li>
+    
+      <li><a href="http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-part-2-of-3/" title="Mapping Stats Canada Data with R part 2 of 3">Mapping Stats Canada Data with R part 2 of 3</a></li>
+    
+      <li><a href="http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-part-1-of-3/" title="Mapping Stats Canada Data with R part 1 of 3">Mapping Stats Canada Data with R part 1 of 3</a></li>
+    
+    </ul>
+    <hr />
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>&copy; 2015 Ben Rifkind. Powered by <a href="http://jekyllrb.com">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://benrifkind.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://benrifkind.github.io/assets/js/scripts.min.js"></script>
+
+	        
+
+</body>
+</html>

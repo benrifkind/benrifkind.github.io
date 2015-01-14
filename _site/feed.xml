@@ -4,7 +4,7 @@
 <generator uri="https://github.com/jekyll/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="http://benrifkind.github.io/feed.xml" />
 <link rel="alternate" type="text/html" href="http://benrifkind.github.io" />
-<updated>2015-01-09T19:17:54-05:00</updated>
+<updated>2015-01-14T17:09:42-05:00</updated>
 <id>http://benrifkind.github.io/</id>
 <author>
   <name>Ben Rifkind</name>
@@ -164,6 +164,154 @@ pAverageResidential &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
 It looks like ward 2, Etobicoke, is the heavy user of water commercially. Any ideas why this would be the case?&lt;/p&gt;
 
   &lt;p&gt;&lt;a href=&quot;http://benrifkind.github.io/Water-Usage-in-Toronto/&quot;&gt;Water Usage in Toronto&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://benrifkind.github.io&quot;&gt;This is a website&lt;/a&gt; on January 07, 2015.&lt;/p&gt;</content>
+</entry>
+
+
+  
+
+<entry>
+  <title type="html"><![CDATA[Mapping Stats Canada Data with R Part 3 of 3]]></title>
+  <link rel="alternate" type="text/html" href="http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-Part-3-of-3/" />
+  <id>http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-Part-3-of-3</id>
+  <published>2014-12-20T00:00:00-05:00</published>
+  <updated>2014-12-20T00:00:00-05:00</updated>
+  <author>
+    <name>Ben Rifkind</name>
+    <uri>http://benrifkind.github.io</uri>
+    
+  </author>
+  <content type="html">&lt;p&gt;I now have some census data for the Ontario census divisions and I’d like to visualize it on a map of Ontario. First I need a GIS file of the census divisions which I can get from the &lt;a href=&quot;http://www12.statcan.gc.ca/census-recensement/2011/geo/bound-limit/bound-limit-2006-eng.cfm&quot;&gt;stats Canada website&lt;/a&gt;. I’ll read in the Ontario census division data and the shape file data&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;rgeos&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;maptools&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;ggmap&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+ontario.data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; read.csv&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Total population by immigrant status and place of birth.csv&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; header&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+sp.Canada &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; readShapeSpatial&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;ShapeOrganizing/Boundary Files//gcd_000a07a_e.shp&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                       proj4string &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; CRS&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;+proj=longlat +datum=WGS84&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;sp.Canada is a shape file which is an S4 object in R. This means that it has different ‘slots’ which contain different attributes of the object. &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;slotNames&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;sp.Canada&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;## [1] &amp;quot;data&amp;quot;        &amp;quot;polygons&amp;quot;    &amp;quot;plotOrder&amp;quot;   &amp;quot;bbox&amp;quot;        &amp;quot;proj4string&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I only care about the data slot which I can access using the ‘@’ symbol. This is a data frame which contains the identifying information of the census divisions.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;kn&quot;&gt;library&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;knitr&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kp&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;sp.Canada&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;data&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;## [1] &amp;quot;CDUID&amp;quot;  &amp;quot;CDNAME&amp;quot; &amp;quot;CDTYPE&amp;quot; &amp;quot;PRUID&amp;quot;  &amp;quot;PRNAME&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;kable&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;sp.Canada&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;data&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;CDUID&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;CDNAME&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;CDTYPE&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;PRUID&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;PRNAME&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1001&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Division No.  1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;CDR&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;10&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Newfoundland and Labrador / Terre-Neuve-et-Labrador&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1002&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Division No.  2&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;CDR&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;10&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Newfoundland and Labrador / Terre-Neuve-et-Labrador&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1003&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Division No.  3&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;CDR&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;10&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Newfoundland and Labrador / Terre-Neuve-et-Labrador&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;3&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1004&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Division No.  4&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;CDR&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;10&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Newfoundland and Labrador / Terre-Neuve-et-Labrador&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1005&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Division No.  5&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;CDR&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;10&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Newfoundland and Labrador / Terre-Neuve-et-Labrador&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;We first select out only the Ontario shape file.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;sp.Ontario &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; sp.Canada&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;sp.Canada&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;PRNAME &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Ontario&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There is a slight issue in that some of the census division names are different in the shape file than in the data frame that I have made. I have to fix this but I’ll leave out the code.&lt;/p&gt;
+
+&lt;p&gt;I used the fortify function to turn the shape file into a data frame so that ggplot can map it.Now I can plot a density map of whichever of the following immigrant statistics I would like.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;##  [1] &amp;quot;Total population by immigrant status and place of birth&amp;quot;
+##  [2] &amp;quot;Non-immigrants&amp;quot;                                         
+##  [3] &amp;quot;Born in province of residence&amp;quot;                          
+##  [4] &amp;quot;Born outside province of residence&amp;quot;                     
+##  [5] &amp;quot;Immigrants&amp;quot;                                             
+##  [6] &amp;quot;United States of America&amp;quot;                               
+##  [7] &amp;quot;Central America&amp;quot;                                        
+##  [8] &amp;quot;Caribbean and Bermuda&amp;quot;                                  
+##  [9] &amp;quot;South America&amp;quot;                                          
+## [10] &amp;quot;Europe&amp;quot;                                                 
+## [11] &amp;quot;Africa&amp;quot;                                                 
+## [12] &amp;quot;Asia and the Middle East&amp;quot;                               
+## [13] &amp;quot;Oceania and other&amp;quot;                                      
+## [14] &amp;quot;Non-permanent residents&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I want to know what the distribution of non-immigrants looks like. First I find the proportion of non-immigrants in each census division. Then merge it with the ontario census map according to the division name. The ordering of the points in the map get mixed up when I do this so I have to reorder them.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;totals &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; ontario.data&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;ontario.data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;Characteristics &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;
+                      &lt;span class=&quot;s&quot;&gt;&amp;quot;Total population by immigrant status and place of birth&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt;
+non.immigrants &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; ontario.data&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;ontario.data&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;Characteristics &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;
+                      &lt;span class=&quot;s&quot;&gt;&amp;quot;Non-immigrants&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,]&lt;/span&gt;
+non.immigrants&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;proportion&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; non.immigrants&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;Total&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;totals&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;Total
+
+&lt;span class=&quot;c1&quot;&gt;#merge the data with the ontario map data frame&lt;/span&gt;
+non.immigrants.map &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;merge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;sp.ontario.df&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                non.immigrants&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                by.x &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; by.y &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Division&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+non.immigrants.map &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; non.immigrants.map&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;non.immigrants.map&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now I just use ggplot to map the data.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;p &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; ggplot&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;data &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; non.immigrants.map&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; aes&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;x&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;long&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; y&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;lat&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; group &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; group&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; 
+  geom_polygon&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;aes&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;fill&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;proportion&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; color &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;black&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+  scale_fill_gradient&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;name &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Proportion of\nnon-immigrants&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                      low &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;gold2&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; high &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;firebrick2&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+p &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; theme &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; labs&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;title &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Proportion of Non-immigrants in Ontario&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/../figs/Mapping-Stats-Canada-Data-Part-3-of3/unnamed-chunk-9-1.png&quot; alt=&quot;center&quot; /&gt; &lt;/p&gt;
+
+&lt;p&gt;So most of the areas outside of Toronto have significantly less immigrants proportionally. We can see the flip side of this if we plot the proportion of immigrants in Ontario. 
+&lt;img src=&quot;/../figs/Mapping-Stats-Canada-Data-Part-3-of3/unnamed-chunk-10-1.png&quot; alt=&quot;center&quot; /&gt; &lt;/p&gt;
+
+&lt;p&gt;Of course this map is just the counterpart to the previous map.&lt;/p&gt;
+
+  &lt;p&gt;&lt;a href=&quot;http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-Part-3-of-3/&quot;&gt;Mapping Stats Canada Data with R Part 3 of 3&lt;/a&gt; was originally published by Ben Rifkind at &lt;a href=&quot;http://benrifkind.github.io&quot;&gt;This is a website&lt;/a&gt; on December 20, 2014.&lt;/p&gt;</content>
 </entry>
 
 
