@@ -14,7 +14,7 @@ tags: [math, experience, resume]
  Department of Mathematics 
     * Ph.D., September 2014
     * Advisor:  Bálint Virág
-    * Thesis: [Two Multiplicative Processes][thesisLink]
+    * Thesis: [Two Multiplicative Processes](/downloads/Rifkind_Benjamin_A_201409_PhD_Thesis.pdf)
 
 
 # Papers
