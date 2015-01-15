@@ -2,8 +2,8 @@
 
 title:            This is a website 
 locale:           en_US
-url:              http://localhost:4000
-#url:              http://benrifkind.github.io
+#url:              http://localhost:4000
+url:              http://benrifkind.github.io
 
 # Jekyll configuration
 permalink:   /:categories/:title/
