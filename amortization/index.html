@@ -2,81 +2,85 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>D3 Test</title>
-        <script type="text/javascript" src="d3/d3.v3.js"></script>
+        <title>Amortization Calculator</title>
+
+         <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="grid.css" rel="stylesheet">
+
         <script type="text/javascript" src="jquery-2.1.4.min.js"></script>
         <script type='text/javascript' src='script.js'></script>
-        <style type="text/css">
-        .green {
-            height: 100px;
-            width: 100px;
-            background-color: #4ECDC4;
-            border-radius: 5px;
-            display: inline-block;
-            }
-        .orange {
-        height: 100px;
-        width: 100px;
-        background-color: orange;
-        border-radius: 5px;
-        display: inline-block;
-        }
-        </style>
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     </head>
 
-    <body>
+<body>
 
-    <div>
-    Principal <br>
-    <input type="number" title="Principal" id = 'principal' name = 'principal', value="100000.00"\> <br>
-    Yearly Interest Rate<br>
-    <input type="number" title="Interest" id = 'interest' name ='interest' value="10.0"/><br>
-    Number of Years <br>
-    <input type="number" title="Years" id = 'years' name = 'years' value="30.0"/><br>
-    <input type="submit" id = 'calculate' value="Calculate" /><br>
+    <!-- preamble -->
+    <div class = 'container'>
+         <div class="page-header">
+            <h1>Amortization Calculator</h1>
+            <p class="lead">Input the principal, yearly interest rate, number of years of the loan, and payments per year to get the monthly fee payment and payment schedule</p>
     </div>
 
-    <div id = 'payment'>
-    Payment Ammount <br>
+    <!-- user inputs for amortization calculation-->
+    <div class='container'>
+        <div class="row">
+            <div class="col-md-3">
+                <label> Principal </label>
+                <input type="number" title="Principal" id = 'principal' value="100000.00", placeholder="100000.00"\>
+            </div>
+            <div class="col-md-3">
+                <label> Interest Rate </label>
+                <input type="number" id = 'interest' name ='interest' value="6.0", placeholder="10.0">
+            </div>
+            <div class="col-md-3">
+                <label> Number of Years </label>
+                <input type="number" title="Years" id = 'years' name = 'years' value="30.0">
+            </div>
+            <div class="col-md-3">
+                <label> Payments per year </label>
+                <input type="number" id = 'peryear' value="12"/>
+            </div>
+        </div>
     </div>
 
-    <div class='green'></div>
-    <div class='green'></div> <br>
-    <div class='orange'></div>
-    <div class='orange'></div>
-    <br>
-
-    <svg width="500" height="50">
-    <circle cx="25" cy="25" r="20"
-        fill="rgba(128, 0, 128, 0.75)"
-        stroke="rgba(0, 255, 0, 0.85)" stroke-width="10"/>
-    <circle cx="75" cy="25" r="20"
-        fill="rgba(0, 255, 0, 0.75)"
-        stroke="rgba(0, 0, 255, 0.25)" stroke-width="10"/>
-    <circle cx="125" cy="25" r="20"
-        fill="rgba(255, 255, 0, 0.75)"
-        stroke="rgba(255, 0, 0, 0.25)" stroke-width="10"/>
-    </svg>
-
-        <script type="text/javascript">
-            // Your beautiful D3 code will go here
-            var dataset = [ 25, 7, 5, 26, 11, 8, 25, 14, 23, 19,
-                14, 11, 22, 29, 11, 13, 12, 17, 18, 10,
-                24, 18, 25, 9, 3 ];
-            d3.select("body").selectAll("p")
-                                .data(dataset)
-                                .enter()
-                                .append("div")
-                                .classed("bar", true)
-                                .style("height", function(d) {
-                                    return 5*d + "px";
-                                })
-                                .style("margin-right", function(d) {
-                                    return 2 + "px";
-                                })
-
-        </script>
+    <!--- payment ammounts -->
+    <div class='container'>
+        <div class='row'>
+                <div class="col-md-3" id="userinputs">
+                    <div>
+                    <label>  </label>
+                    <input type="submit" id = 'calculate' value="Calculate" />
+                    </div>
+                    <div>
+                    <input type="checkbox" id='showam'> Show Amortization Schedule
+                    </div>
+                </div>
+        </div>
+    </div>
 
 
-    </body>
+    <div class='container'>
+        <div id="payment">
+        </div>
+    </div>
+
+    <!-- the payment schedule -->
+    <div class='container'>
+        <div id='table'>
+                <h4 class="sub-header" id = 'amtable_header'></h4>
+                    <div class = 'container'>
+                        <div class='table'>
+                            <table id = "paymentplan" class="table table-condensed">
+                            </table>
+                        </div>
+        </div>
+    </div>
+
+
+</body>
 </html>
