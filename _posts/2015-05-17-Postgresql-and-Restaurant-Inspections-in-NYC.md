@@ -1,5 +1,5 @@
 ---
-title: "Postgresql: Restaurant Inspections in NYC"
+title: "Postgresql and Restaurant Inspections in NYC"
 layout: post
 tags: [postgresql, restaurant inspections, pandas]
 output: html_document
