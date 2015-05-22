@@ -10,11 +10,11 @@ image:
   creditlink: http://www.hdwallsweb.com/black-background.html
 ---
 
-I recently completed my Ph.D at the University of Toronto. My thesis advisor was [Bálint Virág][viragWeb] and my research focused on probability theory. 
+I recently completed my Ph.D at the University of Toronto. My thesis advisor was [Bálint Virág][viragWeb] and my research focused on probability theory.
 
-I am now trying to bridge the gap from academia to industry by teaching myself some programming; specifically I have been playing around a lot with R and python and data frames as well as learning some statistical learning theory.
+I am now trying to bridge the gap from academia to industry by teaching myself some machine learning; specifically I have been playing around a lot with R, python, and some statistical analysis.
 
-I hope for this website to contain the projects I am working on in order to teach myself these things. 
+The (optimistic) plan is that this website will contain the projects I am working on in order to teach myself these things.
 
 
 [thesislink]: http://individual.utoronto.ca/rifkind/thesis.pdf

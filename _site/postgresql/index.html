@@ -1,0 +1,424 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<title>Postgresql - Restaurant Inspections in NYC &#8211; This is a website</title>
+<meta name="description" content="
+
+
+
+
+
+">
+<meta name="keywords" content="postgresql, restaurant inspections, pandas">
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Postgresql - Restaurant Inspections in NYC">
+<meta name="twitter:description" content="
+
+
+
+
+
+">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://benrifkind.github.io/images/default-thumb.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Postgresql - Restaurant Inspections in NYC">
+<meta property="og:description" content="
+
+
+
+
+
+">
+<meta property="og:url" content="http://benrifkind.github.io/postgresql/">
+<meta property="og:site_name" content="This is a website">
+
+
+
+
+
+<link rel="canonical" href="http://benrifkind.github.io/postgresql/">
+<link href="http://benrifkind.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="This is a website Feed">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://benrifkind.github.io/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="http://benrifkind.github.io/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="http://benrifkind.github.io/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="http://benrifkind.github.io/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://benrifkind.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://benrifkind.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://benrifkind.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://benrifkind.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://benrifkind.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://benrifkind.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body class="post">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="http://benrifkind.github.io">This is a website</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav">
+		    <ul>
+		        
+					    
+					        
+					    
+					    <li><a href="http://benrifkind.github.io/about/" >About</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://benrifkind.github.io/posts/" >Posts</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://benrifkind.github.io/research/" >Research</a></li>
+					  
+					    
+					        
+					    
+					    <li><a href="http://benrifkind.github.io/downloads/BenRifkindCV.pdf" >CV</a></li>
+					  
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+
+
+
+	<img src="http://benrifkind.github.io/images/BenR2.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+
+<h3>Ben Rifkind</h3>
+<p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
+
+
+
+
+
+
+
+<a href="http://github.com/benrifkind" class="author-social" target="_blank"><i class="fa fa-fw fa-github"></i> Github</a>
+
+
+
+
+
+
+
+
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="http://benrifkind.github.io/postgresql/" rel="bookmark" title="Postgresql - Restaurant Inspections in NYC">Postgresql - Restaurant Inspections in NYC</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <script src="/assets/js/jquery-2.1.4.min.js"></script>
+
+<script src="http://benrifkind.github.io/assets/js/d3/d3.v3.js"></script>
+
+<script src="http://benrifkind.github.io/assets/js/utils/table.js"></script>
+
+<p>To start learning postgresql, I analyzed the inspection records of the restaurants in New York.</p>
+
+<p><a href="https://s3.amazonaws.com/thedataincubator/coursedata/nyc_inspection_data.zip">(https://s3.amazonaws.com/thedataincubator/coursedata/nyc_inspection_data.zip)</a></p>
+
+<p>The data was a bit messy with some unnecessary href tags so I used python to remove these and clean up the data a little bit. I’ll spare the details but the code is <a href="https://github.com/benrifkind/ppsql_restaurant_inspections/blob/master/clean_files.py">here</a>.</p>
+
+<p>The main file is Webextract.txt which contains the record of all inspections of NYC restaurants from around 2009 to 2014 (though according to the data there are some inspections from 1900?).</p>
+
+<p>Let’s take a look at the first few entries of the inspection table.</p>
+
+<div id="grades">
+</div>
+<script>
+build_table("http://benrifkind.github.io" + "/downloads/DataIncubator/nyc/web_extract_play.txt", 5, 'grades')
+</script>
+
+<p>I am mostly interested in the scores. I want to look at different groupings of restaurants and extract the best and worst restaurant scores.  First of all, the higher the score the worse the restaurant did in the inspection - the score keeps track of the number of violations. Notice also that cuisinecode and violcode are just 2-3 character strings. To interpret them we will need the lookup tables Cuisine.txt and Violation.txt. I definitely see a use for sql joins in the near future!</p>
+
+<p>As I said, I will be using postgresql to analyze this data set. The full sql code is available <a href="https://github.com/benrifkind/ppsql_restaurant_inspections/blob/master/sql_tables.sql">here</a>.</p>
+
+<h3 id="scores-by-zipcode">Scores by Zipcode</h3>
+<p>To start I wanted to know something about the mean grade in the different zipcodes of new york and who was doing the worst:</p>
+
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- compute the mean, standard error of the scores in each zipcode</span>
+<span class="c1">-- order by top scores</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">topscores</span>
+<span class="k">AS</span>
+<span class="k">SELECT</span>
+  <span class="n">zipcode</span><span class="p">,</span>
+  <span class="k">avg</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="k">as</span> <span class="n">mean</span><span class="p">,</span>
+  <span class="n">stddev</span><span class="p">(</span><span class="n">score</span><span class="p">)</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="k">count</span><span class="p">(</span><span class="n">score</span><span class="p">))</span> <span class="k">as</span> <span class="n">std</span>
+<span class="k">FROM</span> <span class="n">grades</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">zipcode</span>
+<span class="k">HAVING</span> <span class="k">count</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">mean</span> <span class="k">DESC</span><span class="p">;</span></code></pre></div>
+
+<div id="top_bor">
+</div>
+<script>
+build_table("http://benrifkind.github.io" + "/downloads/DataIncubator/sql/part1.csv", 3, 'top_bor')
+</script>
+
+<div>
+<p>
+I checked the worst scoring zipcode and it's Flushing, NY. I've never been there and now it's slightly lower on my to do list.
+</p>
+<p>
+Obviously I'm also interested to see which zipcodes have the best scores and how much better those grades are.
+</p>
+</div>
+
+<div id="bot_bor">
+</div>
+<script>
+build_table("http://benrifkind.github.io" + "/downloads/DataIncubator/sql/part1asc.csv", 3, 'bot_bor')
+</script>
+
+<p>I looked up the top zipcode - this is the neighbourhood right around Rockefeller Center. Probably a lot of volume down there so things need to be kept fairly clean. Also the 10 point difference seems pretty significant.</p>
+
+<h3 id="by-cuisine-type">By Cuisine Type</h3>
+<p>Now let’s look at cuisine types. I want to see what the average scores are of different cuisine types. Notice the join we need to do with the cuisine lookup table to get a descriptive string of the cuisine type. First up the worst scoring cuisine types.</p>
+
+<div class="highlight"><pre><code class="language-postgresql" data-lang="postgresql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">cuisinescores</span>
+  <span class="k">as</span>
+  <span class="k">SELECT</span>
+    <span class="n">codedesc</span><span class="p">,</span>
+    <span class="n">avg</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="k">as</span> <span class="n">mean</span><span class="p">,</span>
+    <span class="n">stddev</span><span class="p">(</span><span class="n">score</span><span class="p">)</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">count</span><span class="p">(</span><span class="n">score</span><span class="p">))</span> <span class="k">as</span> <span class="n">stderr</span><span class="p">,</span>
+    <span class="n">count</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="k">as</span> <span class="n">numinspect</span>
+  <span class="k">FROM</span> <span class="n">grades</span> <span class="k">inner</span> <span class="k">join</span> <span class="n">cuisine</span>
+    <span class="k">using</span> <span class="p">(</span><span class="n">cuisinecode</span><span class="p">)</span>
+  <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">codedesc</span>
+  <span class="k">order</span> <span class="k">by</span> <span class="n">mean</span> <span class="k">DESC</span><span class="p">;</span></code></pre></div>
+
+<div id="bot_cuis">
+</div>
+<script>
+build_table("http://benrifkind.github.io" + "/downloads/DataIncubator/sql/part3.csv", 5, 'bot_cuis')
+</script>
+
+<p>And of course we need to look at the flip side of this. Which cuisine types are not keeping such clean establishments?</p>
+
+<div id="top_cuis">
+</div>
+<script>
+build_table("http://benrifkind.github.io" + "/downloads/DataIncubator/sql/part3asc.csv", 5, 'top_cuis')
+</script>
+
+<p>So at first glance, it seems that the simpler the food prep is the better the inspection score. Probably could have guessed that but it’s nice to see it in the data. One outlier here is Ethiopian food. I don’t think the food prep there is that simple but it scores quite well.</p>
+
+<p>As a side note, I’m curious how prevalent a type of restaurant has to be to break out of regional categorization. I’m thinking African versus Ethiopian. And I also noticed that there is no subcategory for sushi restaurants. Seems like they’re all considered Japanese restaurants.</p>
+
+<h3 id="disproportionate-violations-per-cuisine-code">Disproportionate violations per cuisine code</h3>
+<p>The next question I try to answer is which cuisines have a disproportionate number of which violations. Notice that more prevalent cuisine categories will have more violations because there are more such restaurants. And there are also more common types of violations across all cuisine types.</p>
+
+<p>To to take of this normalization issue we look at the conditional probability of a particular violation given a cuisine code normalized (divided by) the probability of that violation over the whole data set.</p>
+
+<p>Just to make things more complicated the violation codes change over time. As an example ‘01D’ could mean “Current valid food vendor license not available” or “Failure to comply with an Order of the Board Commissioner or Department” depending on the date of inspection. To take care of that we first do a join with the violation table and then keep only the violation descriptions which were valid on the date of inspection.</p>
+
+<div class="highlight"><pre><code class="language-postgresql" data-lang="postgresql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">grade_viol_descript</span>
+<span class="k">AS</span>
+<span class="k">SELECT</span> <span class="n">cuisinecode</span><span class="p">,</span> <span class="n">violationdesc</span>
+<span class="k">FROM</span>
+<span class="p">(</span><span class="k">SELECT</span>
+  <span class="n">cuisinecode</span><span class="p">,</span>
+  <span class="n">violcode</span><span class="p">,</span>
+  <span class="n">inspdate</span><span class="p">,</span>
+  <span class="n">startdate</span><span class="p">,</span>
+  <span class="n">enddate</span><span class="p">,</span>
+  <span class="n">violationdesc</span>
+  <span class="k">FROM</span> <span class="n">grades</span>
+  <span class="k">JOIN</span> <span class="n">violation</span>
+<span class="k">ON</span> <span class="n">violcode</span> <span class="o">=</span> <span class="n">violationcode</span>
+<span class="k">WHERE</span> <span class="n">startdate</span> <span class="o">&lt;</span> <span class="n">inspdate</span> <span class="k">and</span> <span class="n">inspdate</span> <span class="o">&lt;</span> <span class="n">enddate</span><span class="p">)</span> <span class="k">AS</span> <span class="n">foo</span><span class="p">;</span></code></pre></div>
+
+<p>Now we have to do a bunch of frequency counting. We need a count of the total number of violations,
+violations per cuisine code, violations per violation code, and violations per cuisine code, violation code (number of particular violations of a cuisine code). And I’m sure that will be a lot clearer in the sql below!</p>
+
+<div class="highlight"><pre><code class="language-postgresql" data-lang="postgresql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">viol_counts</span>
+<span class="k">as</span>
+<span class="k">SELECT</span> <span class="n">cuisinecode</span><span class="p">,</span> <span class="n">violationdesc</span><span class="p">,</span> <span class="n">viol_c</span><span class="p">,</span> <span class="n">viol_v</span><span class="p">,</span> <span class="n">viol_v_c</span><span class="p">,</span>
+      <span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="n">viol_v_c</span><span class="p">)</span> <span class="k">over</span><span class="p">())</span> <span class="k">as</span> <span class="n">viol_total</span>
+<span class="k">FROM</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+    <span class="n">cuisinecode</span><span class="p">,</span>
+    <span class="n">violationdesc</span><span class="p">,</span>
+    <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">viol_v_c</span>
+  <span class="k">FROM</span> <span class="n">grade_viol_descript</span>
+  <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">cuisinecode</span><span class="p">,</span> <span class="n">violationdesc</span>
+  <span class="p">)</span><span class="k">as</span> <span class="n">viols_v_c</span>
+  <span class="k">join</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+    <span class="n">cuisinecode</span><span class="p">,</span>
+    <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">viol_c</span>
+  <span class="k">FROM</span> <span class="n">grade_viol_descript</span>
+  <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">cuisinecode</span>
+  <span class="p">)</span> <span class="k">as</span> <span class="n">viols_c</span>
+  <span class="k">using</span><span class="p">(</span><span class="n">cuisinecode</span><span class="p">)</span>
+  <span class="k">join</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+    <span class="n">violationdesc</span><span class="p">,</span>
+    <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">viol_v</span>
+  <span class="k">FROM</span> <span class="n">grade_viol_descript</span>
+  <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">violationdesc</span>
+  <span class="p">)</span> <span class="k">as</span> <span class="n">viols_v</span>
+  <span class="k">using</span><span class="p">(</span><span class="n">violationdesc</span><span class="p">);</span></code></pre></div>
+
+<p>Now we can use the counts to get the probabilities of all the different violation configurations and from that calculate the ratio we are interested in. This ratio is skewed when the number of violations of a the particular cuisine is small or when the count of the particular violation is small. To avoid this we select out only those points with more than 100 violations of a certain cuisine code and particular violation.</p>
+
+<div class="highlight"><pre><code class="language-postgresql" data-lang="postgresql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">viol_probs</span>
+<span class="k">AS</span>
+<span class="k">SELECT</span>
+      <span class="n">violationdesc</span><span class="p">,</span>
+      <span class="n">cuisinecode</span><span class="p">,</span>
+      <span class="n">viol_c</span><span class="p">,</span>
+      <span class="n">viol_v</span><span class="p">,</span>
+      <span class="n">viol_v_c</span><span class="p">,</span>
+      <span class="n">p_v_c</span><span class="p">,</span>
+      <span class="n">p_v</span><span class="p">,</span>
+      <span class="n">p_v_c</span><span class="o">/</span><span class="n">p_v</span> <span class="k">as</span> <span class="n">ratio</span>
+<span class="k">FROM</span>
+  <span class="p">(</span>
+  <span class="k">SELECT</span> <span class="n">violationdesc</span><span class="p">,</span>
+        <span class="n">cuisinecode</span><span class="p">,</span>
+        <span class="p">(</span><span class="k">cast</span><span class="p">(</span><span class="n">viol_v_c</span> <span class="k">as</span> <span class="k">float</span><span class="p">))</span><span class="o">/</span><span class="n">viol_c</span> <span class="k">as</span> <span class="n">p_v_c</span><span class="p">,</span>
+        <span class="n">viol_v</span><span class="o">/</span><span class="n">viol_total</span> <span class="k">as</span> <span class="n">p_v</span><span class="p">,</span>
+        <span class="n">viol_c</span><span class="p">,</span>
+        <span class="n">viol_v</span><span class="p">,</span>
+        <span class="n">viol_v_c</span>
+  <span class="k">FROM</span>
+    <span class="n">viol_counts</span>
+  <span class="k">where</span> <span class="n">viol_v_c</span> <span class="o">&gt;</span> <span class="mf">100</span>
+  <span class="p">)</span> <span class="k">as</span> <span class="n">pre_viol_prob</span><span class="p">;</span></code></pre></div>
+
+<div id="part4">
+</div>
+
+<script>
+build_table("http://benrifkind.github.io" + "/downloads/DataIncubator/sql/part4.csv", 10, 'part4')
+</script>
+
+<p>As I said earlier, there is no category for sushi restaurants. And so Japanese encompasses a lot of sushi restaurants which I guess do not handle raw (sea) food in a way that makes health inspectors very happy. The issue of not holding food certificates and posters not being placed properly for is slightly interesting but probably misleading here. I should be selecting out ‘significant’ inspection violation. The other thing to notice is that cooling and heating food are the main issues rounding out the top ten. This makes a lot of sense to me. When food is being served to customers time is an issue and it takes time and organization to thaw and cool food properly.</p>
+
+<h3 id="final-thoughts">Final thoughts</h3>
+<p>I didn’t love working in postgresql. I did the same analysis in pandas and it felt much cleaner with much more exploratory freedom. In particular setting up the tables in sql was a real pain. There were lots of encoding errors and incorrect data types and fixing these errors was somewhat laborious mostly because it took a lot of trial and error to figure out what was wrong. Of course it was a bit nonsensical to use sql in this analysis because these data sets will actually load in memory. I definitely see the use of working with sql when the data sets are much bigger and I have developed a bit of a feel for the syntax so all around I’d say this was a worthwhile exercise for me.</p>
+
+      <hr />
+      <footer role="contentinfo">
+        <div class="article-author-bottom">
+          
+
+
+
+	<img src="http://benrifkind.github.io/images/BenR2.jpg" class="bio-photo" alt="Ben Rifkind bio photo">
+
+<h3>Ben Rifkind</h3>
+<p>I recently completed my Ph.D in probability at the University of Toronto. Now I am messing around with R, python, and statistical analysis.</p>
+
+
+
+
+
+
+
+<a href="http://github.com/benrifkind" class="author-social" target="_blank"><i class="fa fa-fw fa-github"></i> Github</a>
+
+
+
+
+
+
+
+
+        </div>
+        <p class="byline"><strong>Postgresql - Restaurant Inspections in NYC</strong> was published on <time datetime="2015-05-17T00:00:00-04:00">May 17, 2015</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="http://benrifkind.github.io/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+      <li><a href="http://benrifkind.github.io/Water-Usage-in-Toronto/" title="Water Usage in Toronto">Water Usage in Toronto</a></li>
+    
+      <li><a href="http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-Part-3-of-3/" title="Mapping Stats Canada Data with R Part 3 of 3">Mapping Stats Canada Data with R Part 3 of 3</a></li>
+    
+      <li><a href="http://benrifkind.github.io/Mapping-Stats-Canada-Data-with-R-part-2-of-3/" title="Mapping Stats Canada Data with R part 2 of 3">Mapping Stats Canada Data with R part 2 of 3</a></li>
+    
+    </ul>
+    <hr />
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>&copy; 2015 Ben Rifkind. Powered by <a href="http://jekyllrb.com">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://benrifkind.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://benrifkind.github.io/assets/js/scripts.min.js"></script>
+
+	        
+
+</body>
+</html>
