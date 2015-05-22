@@ -1,12 +1,9 @@
 ---
-title: "Postgresql: Restaurant Inspections in NYC"
+title: "Postgresql - Restaurant Inspections in NYC"
 layout: post
 tags: [postgresql, restaurant inspections, pandas]
 output: html_document
 ---
-<script src="{{site.ur}}/assets/js/jquery-2.1.4.min.js"></script>
-<script src="{{ site.url }}/assets/js/d3/d3.v3.js"></script>
-<script src="{{ site.url }}/assets/js/utils/table.js"></script>
 
 To start learning postgresql, I analyzed the inspection records of the restaurants in New York.
 
@@ -207,3 +204,7 @@ As I said earlier, there is no category for sushi restaurants. And so Japanese e
 
 ### Final thoughts ###
 I didn't love working in postgresql. I did the same analysis in pandas and it felt much cleaner with much more exploratory freedom. In particular setting up the tables in sql was a real pain. There were lots of encoding errors and incorrect data types and fixing these errors was somewhat laborious mostly because it took a lot of trial and error to figure out what was wrong. Of course it was a bit nonsensical to use sql in this analysis because these data sets will actually load in memory. I definitely see the use of working with sql when the data sets are much bigger and I have developed a bit of a feel for the syntax so all around I'd say this was a worthwhile exercise for me.
+
+<script src="{{site.ur}}/assets/js/jquery-2.1.4.min.js"></script>
+<script src="{{ site.url }}/assets/js/d3/d3.v3.js"></script>
+<script src="{{ site.url }}/assets/js/utils/table.js"></script>
