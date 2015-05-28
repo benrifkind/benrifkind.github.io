@@ -4,9 +4,6 @@ layout: post
 tags: [postgresql, restaurant inspections, pandas]
 output: html_document
 ---
-<script src="{{site.ur}}/assets/js/jquery-2.1.4.min.js"></script>
-<script src="{{ site.url }}/assets/js/d3/d3.v3.js"></script>
-<script src="{{ site.url }}/assets/js/utils/table.js"></script>
 
 To start learning postgresql, I analyzed the inspection records of the restaurants in New York.
 
@@ -17,6 +14,11 @@ The data was a bit messy with some unnecessary href tags so I used python to rem
 The main file is Webextract.txt which contains the record of all inspections of NYC restaurants from around 2009 to 2014 (though according to the data there are some inspections from 1900?).
 
 Let's take a look at the first few entries of the inspection table.
+
+<script src="{{site.ur}}/assets/js/jquery-2.1.4.min.js"></script>
+<script src="{{ site.url }}/assets/js/d3/d3.v3.js"></script>
+<script src="{{ site.url }}/assets/js/utils/table.js"></script>
+
 
 <div id='grades'>
 </div>
