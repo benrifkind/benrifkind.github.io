@@ -1,0 +1,32 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  date: Date;
+  tags?: string[];
+}
+
+const { title, date, tags } = Astro.props;
+const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<BaseLayout title={title}>
+  <article>
+    <header class="mb-8">
+      <time class="text-sm text-gray-500 dark:text-gray-400">{formattedDate}</time>
+      <h1 class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{title}</h1>
+      {tags && tags.length > 0 && (
+        <div class="mt-3 flex flex-wrap gap-2">
+          {tags.map(tag => (
+            <span class="text-xs px-2.5 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-full">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
