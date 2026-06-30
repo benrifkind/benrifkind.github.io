@@ -1,0 +1,36 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/posts', label: 'Posts' },
+  { href: '/research', label: 'Research' },
+  { href: '/downloads/BenRifkindCV.pdf', label: 'CV' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+<header class="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
+  <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="/" class="text-lg font-bold text-gray-900 dark:text-white hover:text-primary dark:hover:text-primary-dark transition-colors">
+      Ben Rifkind
+    </a>
+    <nav class="flex items-center gap-1">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class:list={[
+            'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+            currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href))
+              ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
+              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/50'
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+      <ThemeToggle />
+    </nav>
+  </div>
+</header>
